@@ -26,6 +26,7 @@ using namespace glm;
 // in order to use stb_image.h and import a png texture image
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "Plane.h"
 
 void processInput(GLFWwindow *window);
 
@@ -52,154 +53,6 @@ float angle = 0.;
 float zoom = 1.;
 /*******************************************************************************/
 
-void generatePlane(int h, int w, std::vector<unsigned short> &indices, std::vector<std::vector<unsigned short> > &triangles, std::vector<glm::vec3> &indexed_vertices){
-    double x_len = 0.6;
-    double z_len = 0.6;
-    glm::vec3 corner1(-x_len/2.0, 0.0, 0.0); // bottom left
-    glm::vec3 corner2(x_len/2.0, 0.0, 0.0); // bottom right
-    glm::vec3 corner3(-x_len/2.0, 0.0, -z_len); // top left
-    glm::vec3 corner4(x_len/2.0, 0.0, -z_len); // top right
-    double x_step = x_len/w;
-    double z_step = z_len/h;
-
-    glm::vec3 current_c1;
-    glm::vec3 current_c2;
-    glm::vec3 current_c3;
-    glm::vec3 current_c4;
-
-    int index = -1;
-
-    for(int i = 0; i < w ; i++){
-        for(int j = 0 ; j < h; j++){
-            std::vector<unsigned short> triangle1;
-            std::vector<unsigned short> triangle2;
-
-            current_c1[0] = corner1[0] + i*x_step;
-            current_c1[1] = corner1[1];
-            current_c1[2] = corner1[2] + j*z_step;
-
-            current_c2 = current_c1;
-            current_c2[0] += (i+1)*x_step;
-
-            current_c3 = current_c1;
-            current_c3[2] += (j+1)*z_step;
-
-            current_c4 = current_c1;
-            current_c4[0] += (i+1)*x_step;
-            current_c4[2] += (j+1)*z_step;
-
-            indexed_vertices.push_back(current_c1);
-            indexed_vertices.push_back(current_c2);
-            indexed_vertices.push_back(current_c3);
-            indexed_vertices.push_back(current_c4);
-
-            indices.push_back(index + 1);
-            indices.push_back(index + 2);
-            indices.push_back(index + 3);
-            indices.push_back(index + 3);
-            indices.push_back(index + 2);
-            indices.push_back(index + 4);
-            index+=4;
-
-            triangle1.push_back(index + 1);
-            triangle1.push_back(index + 2);
-            triangle1.push_back(index + 3);
-            triangle2.push_back(index + 3);
-            triangle2.push_back(index + 2);
-            triangle2.push_back(index + 4);
-
-            triangles.push_back(triangle1);
-            triangles.push_back(triangle2);
-        }
-    }
-}
-
-void generatePlaneXY(double x_len, double y_len, 
-                    int h, int w, 
-                    std::vector<unsigned short> &indices, 
-                    std::vector<std::vector<unsigned short> > &triangles, 
-                    std::vector<glm::vec3> &indexed_vertices, 
-                    std::vector<glm::vec2> &coord_texture){
-
-    glm::vec3 corner1(-x_len/2.0, -y_len/2.0, 0.0); // bottom left
-    glm::vec3 corner2(x_len/2.0, -y_len/2.0, 0.0); // bottom right
-    glm::vec3 corner3(-x_len/2.0, y_len/2.0, 0.0); // top left
-    glm::vec3 corner4(x_len/2.0, y_len/2.0, 0.0); // top right
-    double x_step = x_len/(double)h;
-    double y_step = y_len/(double)w;
-
-    glm::vec3 current_c1;
-    glm::vec3 current_c2;
-    glm::vec3 current_c3;
-    glm::vec3 current_c4;
-
-    int index = -1;
-
-    for(int i = 0; i < h; i++){
-        for(int j = 0; j < w; j++){
-            std::vector<unsigned short> triangle1;
-            std::vector<unsigned short> triangle2;
-
-            current_c1[0] = corner1[0] + i*x_step;
-            current_c1[1] = corner1[1] + j*y_step;
-            current_c1[2] = corner1[2];
-
-            current_c2 = current_c1;
-            current_c2[0] += x_step;
-
-            current_c3 = current_c1;
-            current_c3[1] += y_step;
-
-            current_c4 = current_c1;
-            current_c4[0] += x_step;
-            current_c4[1] += y_step;
-
-            indexed_vertices.push_back(current_c1);
-            indexed_vertices.push_back(current_c2);
-            indexed_vertices.push_back(current_c3);
-            indexed_vertices.push_back(current_c4);
-
-            indices.push_back(index + 1);
-            indices.push_back(index + 2);
-            indices.push_back(index + 3);
-            indices.push_back(index + 3);
-            indices.push_back(index + 4);
-            indices.push_back(index + 2);
-
-            triangle1.push_back(index + 1);
-            triangle1.push_back(index + 2);
-            triangle1.push_back(index + 3);
-            triangle2.push_back(index + 3);
-            triangle2.push_back(index + 4);
-            triangle2.push_back(index + 2);
-
-            index+=4;
-
-            triangles.push_back(triangle1);
-            triangles.push_back(triangle2);
-
-            // texture 
-            /*coord_texture.push_back({i*x_step, j*y_step});
-            coord_texture.push_back({i*x_step, j*y_step + y_step});
-            coord_texture.push_back({i*x_step + x_step, j*y_step});
-            coord_texture.push_back({i*x_step + x_step, j*y_step + y_step});*/
-            coord_texture.push_back({current_c1[0]/x_len, current_c1[1]/y_len});
-            coord_texture.push_back({current_c2[0]/x_len, current_c2[1]/y_len});
-            coord_texture.push_back({current_c3[0]/x_len, current_c3[1]/y_len});
-            coord_texture.push_back({current_c4[0]/x_len, current_c4[1]/y_len});
-        }
-    }
-}
-
-void addZRelief(std::vector<glm::vec3> &indexed_vertices){
-    for(glm::vec3 vertex : indexed_vertices){
-
-        double f = (double)rand() / RAND_MAX;
-        double rand_z = -0.2 + f * (0.2 - (-0.2));
-
-        vertex[2] = vertex[2] + rand_z;
-    }
-}
 
 int main( void )
 {
@@ -277,8 +130,10 @@ int main( void )
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    generatePlaneXY(1.6, 1.6, 16, 16, indices, triangles, indexed_vertices, coord_texture);
-    //addZRelief(indexed_vertices); // TODO once camera is set
+    Plane *planeXY = new Plane(1.6, 1.6);
+    planeXY->generatePlaneXY(16, 16, indices, triangles, indexed_vertices, coord_texture);
+    //planeXY->generatePlaneXZ(16, 16, indices, triangles, indexed_vertices, coord_texture);
+    planeXY->addZRelief(indexed_vertices);
 
     // Load it into a VBO
 
@@ -357,9 +212,7 @@ int main( void )
 
 
         /*****************TODO***********************/
-        // Model matrix : an identity matrix (model will be at the origin) then change
         //Model_Matrix = glm::mat4(1.0f); // specifies diagonal of 1's
-        //computeMatricesFromInputs();
 
         // View matrix : camera/view transformation lookat() utiliser camera_position camera_target camera_up
         //View_Matrix = glm::lookAt(camera_position, camera_target + camera_position, camera_up);
@@ -367,16 +220,14 @@ int main( void )
         // Projection matrix : 45 Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
         //Projection_Matrix =  glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 
+        computeMatricesFromInputs();
+
+        View_Matrix = getViewMatrix();
+        Model_Matrix = glm::mat4(1.0f); // identity matrix (model will be at the origin) then change
+        Projection_Matrix = getProjectionMatrix();
+
         // Send our transformation to the currently bound shader,
         // in the "Model View Projection" to the shader uniforms
-        //glUniformMatrix4fv(glGetUniformLocation(programID, "model_matrix"), 1, GL_FALSE, &Model_Matrix[0][0]); // location, count, transpose, value
-        //glUniformMatrix4fv(glGetUniformLocation(programID, "view_matrix"), 1, GL_FALSE, &View_Matrix[0][0]);
-        //glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);
-
-        computeMatricesFromInputs();
-        View_Matrix = getViewMatrix();
-        Model_Matrix = glm::mat4(1.0f);
-        Projection_Matrix = getProjectionMatrix();
         glUniformMatrix4fv(glGetUniformLocation(programID, "model_matrix"), 1, GL_FALSE, &Model_Matrix[0][0]); // location, count, transpose, value
         glUniformMatrix4fv(glGetUniformLocation(programID, "view_matrix"), 1, GL_FALSE, &View_Matrix[0][0]);
         glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);

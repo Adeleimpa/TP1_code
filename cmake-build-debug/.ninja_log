@@ -1,0 +1,12 @@
+# ninja log v5
+6	8028	1676289102112434928	CMakeFiles/TP1.dir/common/texture.cpp.o	d936ef76afb64490
+5	8300	1676289102381895887	CMakeFiles/TP1.dir/common/controls.cpp.o	61a00041f9cf1dfa
+5	9405	1676289103472323878	CMakeFiles/TP1.dir/common/shader.cpp.o	ee04358c33aa0629
+8300	9441	1676289103510042406	external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.o	ded0e5efde37a094
+8029	9563	1676289103637524432	CMakeFiles/TP1.dir/common/vboindexer.cpp.o	6cd2d71b845ca38a
+9441	9715	1676289103806446000	external/libGLEW_1130.a	3ea08cf9b6a3d6e7
+8	10212	1676289104283923612	CMakeFiles/TP1.dir/common/objloader.cpp.o	b82a31ce8a90696c
+9563	11102	1676289105166254395	external/glfw-3.1.2/src/CMakeFiles/glfw.dir/init.c.o	f7c4d7cc0499358b
+9409	11111	1676289105180599011	external/glfw-3.1.2/src/CMakeFiles/glfw.dir/context.c.o	183731421209d132
+9715	11156	1676289105227827102	external/glfw-3.1.2/src/CMakeFiles/glfw.dir/input.c.o	878c46934bb3da90
+2	11947	1676289106021739202	external/glfw-3.1.2/src/CMakeFiles/glfw.dir/nsgl_context.m.o	8b2b77b4e0c085d7

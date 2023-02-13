@@ -321,7 +321,8 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   ../TP1/stb_image.h \
   /usr/include/string.h \
   /usr/include/strings.h \
-  /usr/include/c++/11/math.h
+  /usr/include/c++/11/math.h \
+  ../TP1/Plane.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
   /usr/include/stdc-predef.h \
@@ -1503,6 +1504,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 ../external/glm-0.9.7.1/glm/detail/type_mat3x3.hpp:
 
 ../external/glm-0.9.7.1/glm/detail/type_mat3x2.inl:
+
+../TP1/Plane.h:
 
 ../external/glm-0.9.7.1/glm/detail/type_mat3x2.hpp:
 
