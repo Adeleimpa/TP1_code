@@ -80,39 +80,26 @@ public:
                 glm::vec3 normal;
 
                 if(fix_coord == 'x'){
-                    current_corner[0] = start_corner[0];
-                    current_corner[1] = start_corner[1] + i*step_1;
-                    current_corner[2] = start_corner[2] + j*step_2;
-
+                    current_corner = {start_corner[0], start_corner[1] + i*step_1, start_corner[2] + j*step_2};
                     normal = {1.0, 0.0, 0.0};
-
                     // texture
                     coord_texture.push_back({current_corner[1]/width, 1.0-current_corner[2]/height});
 
                 }else if(fix_coord == 'y') {
-                    current_corner[0] = start_corner[0] + i*step_1;
-                    current_corner[1] = start_corner[1];
-                    current_corner[2] = start_corner[2] + j*step_2;
-
+                    current_corner = {start_corner[0] + i*step_1, start_corner[1], start_corner[2] + j*step_2};
                     normal = {0.0, 1.0, 0.0};
-
                     // texture
                     coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[2]/height});
 
                 }else if(fix_coord == 'z'){
-                    current_corner[0] = start_corner[0] + i*step_1;
-                    current_corner[1] = start_corner[1] + j*step_2;
-                    current_corner[2] = start_corner[2];
-
+                    current_corner = {start_corner[0] + i*step_1, start_corner[1] + j*step_2, start_corner[2]};
                     normal = {0.0, 0.0, 1.0};
-
                     // texture
                     coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[1]/height});
                 }
 
                 //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
                 indexed_vertices.push_back(current_corner);
-
                 normals.push_back(normal);
 
             }
