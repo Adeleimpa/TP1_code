@@ -152,43 +152,13 @@ int main( void )
     glUseProgram(programID);
     GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
 
-    // ---------------------------------------------------------------------------------------------------------
+
     // texture
-    // ---------------------------------------------------------------------------------------------------------
     GLTexture * initial_texture = new GLTexture();
     initial_texture->generateBuffer(coord_texture);
     initial_texture->generateTexture();
     initial_texture->loadTexture("textures/snow.jpg");
     initial_texture->defineParameters();
-    /*unsigned int texture;
-    GLuint buffer_coord_txt;
-
-    // on cree un buffer pour les textures
-    glGenBuffers(1, &buffer_coord_txt);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
-    glBufferData(GL_ARRAY_BUFFER, coord_texture.size() * sizeof(glm::vec2), &coord_texture[0], GL_STATIC_DRAW);
-
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    // on charge et on genere la texture a l'aide de l'image texture (.png)
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("textures/snow.jpg", &width , &height , &nrChannels , 0);
-    if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE , data);
-        glGenerateMipmap(GL_TEXTURE_2D); }
-    else {
-        std::cout << "Failed to load texture" << std::endl; 
-    }
-    stbi_image_free(data);
-
-    // definit les comportements de la texture qd elle est etiree ou reduite
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);*/
-    // ---------------------------------------------------------------------------------------------------------
 
 
     // For speed computation
