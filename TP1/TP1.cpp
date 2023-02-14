@@ -131,9 +131,9 @@ int main( void )
 
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
     Plane *planeXY = new Plane(1.5, 1.5);
-    planeXY->generatePlaneXY(3, 3, indices, triangles, indexed_vertices, coord_texture);
+    planeXY->generatePlaneXY(16, 16, indices, triangles, indexed_vertices, coord_texture);
     //planeXY->generatePlaneXZ(16, 16, indices, triangles, indexed_vertices, coord_texture);
-    //planeXY->addZRelief(indexed_vertices);
+    planeXY->addZRelief(indexed_vertices);
     //planeXY->addYRelief(indexed_vertices);
 
     // Load it into a VBO
