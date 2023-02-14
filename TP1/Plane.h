@@ -51,15 +51,7 @@ public:
                 indexed_vertices.push_back(current_corner);
 
                 // texture
-                // TODO put back fort texture
-                /*coord_texture.push_back({i*x_step, j*y_step});
-                coord_texture.push_back({i*x_step, j*y_step + y_step});
-                coord_texture.push_back({i*x_step + x_step, j*y_step});
-                coord_texture.push_back({i*x_step + x_step, j*y_step + y_step});*/
-                coord_texture.push_back({current_corner[0]/width, current_corner[1]/height});
-                /*coord_texture.push_back({current_c2[0]/width, current_c2[1]/height});
-                coord_texture.push_back({current_c3[0]/width, current_c3[1]/height});
-                coord_texture.push_back({current_c4[0]/width, current_c4[1]/height});*/
+                coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[1]/height});
             }
         }
 
