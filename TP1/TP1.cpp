@@ -128,11 +128,12 @@ int main( void )
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    Plane *planeXY = new Plane(1.5, 1.5);
-    planeXY->generatePlaneXY(16, 16, indices, triangles, indexed_vertices, coord_texture);
-    //planeXY->generatePlaneXZ(16, 16, indices, triangles, indexed_vertices, coord_texture);
-    planeXY->addZRelief(indexed_vertices);
-    //planeXY->addYRelief(indexed_vertices);
+    Plane *plane = new Plane(1.5, 1.5);
+    plane->generatePlane(16, 16, indices, triangles, indexed_vertices, coord_texture, 'z');
+    plane->addRelief(indexed_vertices, 'z');
+
+    // TODO height map
+    //loadBMP_custom;
 
     // Load it into a VBO
 

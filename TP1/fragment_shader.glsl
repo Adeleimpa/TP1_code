@@ -11,7 +11,7 @@ in vec2 coord_txt;
 
 void main(){
 
-        //color = vec3(0.2, 0.2,0.4);
+        // color = vec3(0.2, 0.2,0.4);
 
         FragColor = texture(texture_local, coord_txt);
 

@@ -25,33 +25,85 @@ public:
         height = h;
     }
 
-    void generatePlaneXY(int h, int w,
+    void addRelief(std::vector<glm::vec3> &indexed_vertices, char fix_coord){
+        for(int i = 0; i < indexed_vertices.size(); i++){
+
+            double f = (double)rand() / RAND_MAX;
+            double rand_d = -0.2 + f * (0.2 - (-0.2));
+
+            if(fix_coord == 'x'){
+                indexed_vertices[i][0] += rand_d;
+            }else if(fix_coord == 'y'){
+                indexed_vertices[i][1] += rand_d;
+            }else if(fix_coord == 'z'){
+                indexed_vertices[i][2] += rand_d;
+            }
+
+        }
+    }
+
+    void generatePlane(int h, int w,
                          std::vector<unsigned short> &indices,
                          std::vector<std::vector<unsigned short> > &triangles,
                          std::vector<glm::vec3> &indexed_vertices,
-                         std::vector<glm::vec2> &coord_texture){
+                         std::vector<glm::vec2> &coord_texture,
+                         char fix_coord){
 
-        glm::vec3 start_corner(-width/2.0, -height/2.0, 0.0); // bottom left
-        //glm::vec3 corner2(width/2.0, -height/2.0, 0.0); // bottom right
-        //glm::vec3 corner3(-width/2.0, height/2.0, 0.0); // top left
-        //glm::vec3 corner4(width/2.0, height/2.0, 0.0); // top right
-        double x_step = width/(double)h;
-        double y_step = height/(double)w;
+        glm::vec3 start_corner;
+
+        if(fix_coord == 'x'){
+            start_corner[0] = 0.0;
+            start_corner[1] = -width/2.0;
+            start_corner[2] = -height/2.0;
+        }else if(fix_coord == 'y'){
+            start_corner[0] = -width/2.0;
+            start_corner[1] = 0.0;
+            start_corner[2] = -height/2.0;
+        }else if(fix_coord == 'z'){
+            start_corner[0] = -width/2.0;
+            start_corner[1] = -height/2.0;
+            start_corner[2] = 0.0;
+        }else{
+            std::cout << "WARNING: wrong fixed coordinate in parameters to generate plane" << std::endl;
+        }
+
+        double step_1 = width/(double)h;
+        double step_2 = height/(double)w;
 
         glm::vec3 current_corner;
 
         // fill indexed_vertices
         for(int i = 0; i <= h; i++) {
             for (int j = 0; j <= w; j++) {
-                current_corner[0] = start_corner[0] + i*x_step;
-                current_corner[1] = start_corner[1] + j*y_step;
-                current_corner[2] = start_corner[2];
-                //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
 
+                if(fix_coord == 'x'){
+                    current_corner[0] = start_corner[0];
+                    current_corner[1] = start_corner[1] + i*step_1;
+                    current_corner[2] = start_corner[2] + j*step_2;
+
+                    // texture
+                    coord_texture.push_back({current_corner[1]/width, 1.0-current_corner[2]/height});
+
+                }else if(fix_coord == 'y') {
+                    current_corner[0] = start_corner[0] + i*step_1;
+                    current_corner[1] = start_corner[1];
+                    current_corner[2] = start_corner[2] + j*step_2;
+
+                    // texture
+                    coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[2]/height});
+
+                }else if(fix_coord == 'z'){
+                    current_corner[0] = start_corner[0] + i*step_1;
+                    current_corner[1] = start_corner[1] + j*step_2;
+                    current_corner[2] = start_corner[2];
+
+                    // texture
+                    coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[1]/height});
+                }
+
+                //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
                 indexed_vertices.push_back(current_corner);
 
-                // texture
-                coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[1]/height});
             }
         }
 
@@ -91,100 +143,6 @@ public:
 
                 triangles.push_back(triangle1);
                 triangles.push_back(triangle2);
-            }
-        }
-    }
-
-    void addZRelief(std::vector<glm::vec3> &indexed_vertices){
-        for(int i = 0; i < indexed_vertices.size(); i++){
-
-            double f = (double)rand() / RAND_MAX;
-            double rand_z = -0.2 + f * (0.2 - (-0.2));
-
-            indexed_vertices[i][2] = indexed_vertices[i][2] + rand_z;
-        }
-    }
-
-    void addYRelief(std::vector<glm::vec3> &indexed_vertices){
-        for(int i =0; i < indexed_vertices.size(); i++){
-
-            double f = (double)rand() / RAND_MAX;
-            double rand_z = -0.2 + f * (0.2 - (-0.2));
-
-            indexed_vertices[i][1] = indexed_vertices[i][1] + rand_z;
-        }
-    }
-
-    // PLANE XZ - TO FIX
-    void generatePlaneXZ(int h, int w,
-                         std::vector<unsigned short> &indices,
-                         std::vector<std::vector<unsigned short> > &triangles,
-                         std::vector<glm::vec3> &indexed_vertices,
-                         std::vector<glm::vec2> &coord_texture){
-
-        glm::vec3 corner1(-width/2.0, 0.0, 0.0); // bottom left
-        glm::vec3 corner2(width/2.0, 0.0, 0.0); // bottom right
-        glm::vec3 corner3(-width/2.0, 0.0, -height); // top left
-        glm::vec3 corner4(width/2.0, 0.0, -height); // top right
-
-        double x_step = width/(double)w;
-        double z_step = height/(double)h;
-
-        glm::vec3 current_c1;
-        glm::vec3 current_c2;
-        glm::vec3 current_c3;
-        glm::vec3 current_c4;
-
-        int index = -1;
-
-        for(int i = 0; i < w ; i++){
-            for(int j = 0 ; j < h; j++){
-                std::vector<unsigned short> triangle1;
-                std::vector<unsigned short> triangle2;
-
-                current_c1[0] = corner1[0] + i*x_step;
-                current_c1[1] = corner1[1];
-                current_c1[2] = corner1[2] + j*z_step;
-
-                current_c2 = current_c1;
-                current_c2[0] += (i+1)*x_step;
-
-                current_c3 = current_c1;
-                current_c3[2] += (j+1)*z_step;
-
-                current_c4 = current_c1;
-                current_c4[0] += (i+1)*x_step;
-                current_c4[2] += (j+1)*z_step;
-
-                indexed_vertices.push_back(current_c1);
-                indexed_vertices.push_back(current_c2);
-                indexed_vertices.push_back(current_c3);
-                indexed_vertices.push_back(current_c4);
-
-                indices.push_back(index + 1);
-                indices.push_back(index + 2);
-                indices.push_back(index + 3);
-                indices.push_back(index + 3);
-                indices.push_back(index + 4);
-                indices.push_back(index + 2);
-
-                triangle1.push_back(index + 1);
-                triangle1.push_back(index + 2);
-                triangle1.push_back(index + 3);
-                triangle2.push_back(index + 3);
-                triangle2.push_back(index + 4);
-                triangle2.push_back(index + 2);
-
-                index+=4;
-
-                triangles.push_back(triangle1);
-                triangles.push_back(triangle2);
-
-                // texture
-                coord_texture.push_back({current_c1[0]/width, current_c1[2]/height});
-                coord_texture.push_back({current_c2[0]/width, current_c2[2]/height});
-                coord_texture.push_back({current_c3[0]/width, current_c3[2]/height});
-                coord_texture.push_back({current_c4[0]/width, current_c4[2]/height});
             }
         }
     }

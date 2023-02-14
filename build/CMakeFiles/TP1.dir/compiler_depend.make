@@ -324,7 +324,8 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   /usr/include/c++/11/math.h \
   ../TP1/Plane.h \
   ../TP1/GLTexture.h \
-  ../TP1/Texture.h
+  ../TP1/Texture.h \
+  ../TP1/Camera.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
   /usr/include/stdc-predef.h \
@@ -1424,6 +1425,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 /usr/include/KHR/khrplatform.h:
 
 /usr/include/GL/glext.h:
+
+../TP1/Camera.h:
 
 ../TP1/Texture.h:
 
