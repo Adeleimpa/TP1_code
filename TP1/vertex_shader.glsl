@@ -23,6 +23,7 @@ void main(){
         gl_Position = transformation_matrix * vec4(vertices_position_modelspace, 1);
         //gl_Position = vec4(vertices_position_modelspace, 1);
 
-        coord_txt = coord; // texture
+        // TODO put back fort texture
+        //coord_txt = coord; // texture
 }
 

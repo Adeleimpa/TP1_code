@@ -130,8 +130,8 @@ int main( void )
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    Plane *planeXY = new Plane(1.6, 1.6);
-    planeXY->generatePlaneXY(16, 16, indices, triangles, indexed_vertices, coord_texture);
+    Plane *planeXY = new Plane(1.5, 1.5);
+    planeXY->generatePlaneXY(3, 3, indices, triangles, indexed_vertices, coord_texture);
     //planeXY->generatePlaneXZ(16, 16, indices, triangles, indexed_vertices, coord_texture);
     //planeXY->addZRelief(indexed_vertices);
     //planeXY->addYRelief(indexed_vertices);
@@ -169,7 +169,7 @@ int main( void )
 
     // on charge et on genere la texture a l'aide de l'image texture (.png)
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("textures/snow.jpg", &width , &height , &nrChannels , 0);
+    unsigned char *data = stbi_load("textures/texture.png", &width , &height , &nrChannels , 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE , data);
         glGenerateMipmap(GL_TEXTURE_2D); }
@@ -212,15 +212,9 @@ int main( void )
         glUseProgram(programID);
 
 
-        /*****************TODO***********************/
-        //Model_Matrix = glm::mat4(1.0f); // specifies diagonal of 1's
-        //Model_Matrix = glm::mat4(1.0f);
-
-        // View matrix : camera/view transformation lookat() utiliser camera_position camera_target camera_up
-        //View_Matrix = glm::lookAt(camera_position, camera_target + camera_position, camera_up);
-
-        // Projection matrix : 45 Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-        //Projection_Matrix =  glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+        // ---------------------------------------------------------------------------------
+        // CAMERA
+        // ---------------------------------------------------------------------------------
 
         computeMatricesFromInputs();
 
@@ -234,8 +228,7 @@ int main( void )
         glUniformMatrix4fv(glGetUniformLocation(programID, "view_matrix"), 1, GL_FALSE, &View_Matrix[0][0]);
         glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);
 
-        /****************************************/
-
+        // ---------------------------------------------------------------------------------
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -263,7 +256,7 @@ int main( void )
         glUniform1i(loc2, indexActiveTexture);
         glEnableVertexAttribArray(2);
 
-        // glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // TEST
+        // glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see triangles of plan
 
         // Draw the triangles !
         glDrawElements(
