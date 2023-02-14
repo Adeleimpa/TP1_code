@@ -114,14 +114,12 @@ int main( void )
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
 
-    /*****************TODO***********************/
-    // Get a handle for our "Model View Projection" matrices uniforms
 
-    /****************************************/
     std::vector<unsigned short> indices; //Triangles concaténés dans une liste
     std::vector<std::vector<unsigned short> > triangles;
     std::vector<glm::vec3> indexed_vertices;
     std::vector<glm::vec2> coord_texture; // texture
+    std::vector<glm::vec3> normals;
 
     // Loading mesh file
     //std::string filename("chair.off");
@@ -129,14 +127,14 @@ int main( void )
 
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
     Plane *plane = new Plane(1.5, 1.5);
-    plane->generatePlane(16, 16, indices, triangles, indexed_vertices, coord_texture, 'z');
-    plane->addRelief(indexed_vertices, 'z');
+    plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
+    plane->addRelief(indexed_vertices, 'y');
 
     // TODO height map
     Texture *height_map = new Texture();
     height_map->readTexture("textures/heightmap-1024x1024.png");
 
-    // Load it into a VBO
+    // Load data (vertices, meshes, etc.) into VBO's
 
     GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);

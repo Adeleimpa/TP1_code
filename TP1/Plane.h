@@ -46,6 +46,7 @@ public:
                          std::vector<unsigned short> &indices,
                          std::vector<std::vector<unsigned short> > &triangles,
                          std::vector<glm::vec3> &indexed_vertices,
+                         std::vector<glm::vec3> &normals,
                          std::vector<glm::vec2> &coord_texture,
                          char fix_coord){
 
@@ -76,10 +77,14 @@ public:
         for(int i = 0; i <= h; i++) {
             for (int j = 0; j <= w; j++) {
 
+                glm::vec3 normal;
+
                 if(fix_coord == 'x'){
                     current_corner[0] = start_corner[0];
                     current_corner[1] = start_corner[1] + i*step_1;
                     current_corner[2] = start_corner[2] + j*step_2;
+
+                    normal = {1.0, 0.0, 0.0};
 
                     // texture
                     coord_texture.push_back({current_corner[1]/width, 1.0-current_corner[2]/height});
@@ -89,6 +94,8 @@ public:
                     current_corner[1] = start_corner[1];
                     current_corner[2] = start_corner[2] + j*step_2;
 
+                    normal = {0.0, 1.0, 0.0};
+
                     // texture
                     coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[2]/height});
 
@@ -97,12 +104,16 @@ public:
                     current_corner[1] = start_corner[1] + j*step_2;
                     current_corner[2] = start_corner[2];
 
+                    normal = {0.0, 0.0, 1.0};
+
                     // texture
                     coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[1]/height});
                 }
 
                 //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
                 indexed_vertices.push_back(current_corner);
+
+                normals.push_back(normal);
 
             }
         }
