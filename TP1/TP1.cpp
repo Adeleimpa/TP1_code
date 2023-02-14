@@ -133,7 +133,8 @@ int main( void )
     plane->addRelief(indexed_vertices, 'z');
 
     // TODO height map
-    //loadBMP_custom;
+    Texture *height_map = new Texture();
+    height_map->readTexture("textures/heightmap-1024x1024.png");
 
     // Load it into a VBO
 
@@ -189,7 +190,7 @@ int main( void )
         // CAMERA
         Camera *camera = new Camera();
         camera->MVP(programID);
-        
+
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);

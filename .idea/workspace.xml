@@ -44,7 +44,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="680caa9c-3924-449d-86dc-26a773c13fd0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/GLTexture.h" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/GLTexture.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1/TP1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/Texture.h" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/Texture.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/build/TP1" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,7 +269,7 @@
       <workItem from="1675323033388" duration="3000" />
       <workItem from="1675324213110" duration="8829000" />
       <workItem from="1676198599670" duration="4724000" />
-      <workItem from="1676324346647" duration="10370000" />
+      <workItem from="1676324346647" duration="12260000" />
     </task>
     <servers />
   </component>
