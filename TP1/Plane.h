@@ -53,17 +53,11 @@ public:
         glm::vec3 start_corner;
 
         if(fix_coord == 'x'){
-            start_corner[0] = 0.0;
-            start_corner[1] = -width/2.0;
-            start_corner[2] = -height/2.0;
+            start_corner = {0.0, -width/2.0, -height/2.0};
         }else if(fix_coord == 'y'){
-            start_corner[0] = -width/2.0;
-            start_corner[1] = 0.0;
-            start_corner[2] = -height/2.0;
+            start_corner = {-width/2.0, 0.0, -height/2.0};
         }else if(fix_coord == 'z'){
-            start_corner[0] = -width/2.0;
-            start_corner[1] = -height/2.0;
-            start_corner[2] = 0.0;
+            start_corner = {-width/2.0, -height/2.0, 0.0};
         }else{
             std::cout << "WARNING: wrong fixed coordinate in parameters to generate plane" << std::endl;
         }
@@ -101,7 +95,6 @@ public:
                 //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
                 indexed_vertices.push_back(current_corner);
                 normals.push_back(normal);
-
             }
         }
 
@@ -109,19 +102,12 @@ public:
             for(int j = 0; j < w; j++){
                 std::vector<unsigned short> triangle1;
                 std::vector<unsigned short> triangle2;
-
                 int c1, c2, c3, c4;
 
                 c1 = i + j*(w+1);
                 c2 = (i+1) + j*(w+1);
                 c3 = i + (j+1)*(w+1);
                 c4 = (i+1) + (j+1)*(w+1);
-
-                /*std::cout << c1 << std::endl;
-                std::cout << c2 << std::endl;
-                std::cout << c3 << std::endl;
-                std::cout << c4 << std::endl;
-                std::cout << "-------" << std::endl;*/
 
                 indices.push_back(c1);
                 indices.push_back(c2);
@@ -142,6 +128,39 @@ public:
                 triangles.push_back(triangle1);
                 triangles.push_back(triangle2);
             }
+        }
+    }
+
+    void addHeightMap(unsigned char *HM_data, int height, int width, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
+        double range_max_min = 0.4;
+        double min = -range_max_min/2.0;
+
+        int HM_min = INT_MAX;
+        int HM_max = INT_MIN;
+
+        for(int i = 0; i < height*width; i++){
+            int dat = (int)HM_data[i];
+            if(dat < HM_min){ HM_min = dat; }
+            if(dat > HM_max){ HM_max = dat; }
+        }
+        int nr_ndg = HM_max - HM_min;
+
+        for(int i = 0; i < indexed_vertices.size(); i++){
+
+            int dat = (int)HM_data[i];
+            std::cout << "data :" << dat << std::endl;
+            double ratio = (double)dat/(double)nr_ndg;
+            double difference = range_max_min*ratio;
+            std::cout << "difference :" << difference << std::endl;
+
+            if(fix_coord == 'x'){
+                indexed_vertices[i][0] = min + difference;
+            }else if(fix_coord == 'y'){
+                indexed_vertices[i][1] = min + difference;
+            }else if(fix_coord == 'z'){
+                indexed_vertices[i][2] = min + difference;
+            }
+
         }
     }
 

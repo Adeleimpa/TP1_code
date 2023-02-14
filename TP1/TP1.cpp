@@ -125,14 +125,17 @@ int main( void )
     //std::string filename("chair.off");
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
-    // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    Plane *plane = new Plane(1.5, 1.5);
-    plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
-    plane->addRelief(indexed_vertices, 'y');
+    // TP1: generate plane -> fill arrays of indices, triangles and indexed_vertices
+    Plane *plane = new Plane(3.0, 3.0);
+    //plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'z');
+    //plane->addRelief(indexed_vertices, 'z');
 
-    // TODO height map
+    // TP2: use height map
     Texture *height_map = new Texture();
-    height_map->readTexture("textures/heightmap-1024x1024.png");
+    height_map->readTexture("textures/Heightmap_Mountain128.png");
+    plane->generatePlane(height_map->height, height_map->width, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
+    //plane->addRelief(indexed_vertices, 'z');
+    plane->addHeightMap(height_map->data, height_map->height, height_map->width, indexed_vertices, 'y');
 
     // Load data (vertices, meshes, etc.) into VBO's
 
@@ -156,7 +159,7 @@ int main( void )
     GLTexture * initial_texture = new GLTexture();
     initial_texture->generateBuffer(coord_texture);
     initial_texture->generateTexture();
-    initial_texture->loadTexture("textures/snow.jpg");
+    initial_texture->loadTexture("textures/texture.png");
     initial_texture->defineParameters();
 
 

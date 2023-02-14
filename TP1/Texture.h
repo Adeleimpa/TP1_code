@@ -21,6 +21,7 @@ public:
         if (data) {} else { std::cout << "Failed to load texture" << std::endl; }
         stbi_image_free(data);
     }
+
 };
 
 
