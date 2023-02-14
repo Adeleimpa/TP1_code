@@ -111,6 +111,16 @@ public:
         }
     }
 
+    void addYRelief(std::vector<glm::vec3> &indexed_vertices){
+        for(glm::vec3 vertex : indexed_vertices){
+
+            double f = (double)rand() / RAND_MAX;
+            double rand_z = -0.2 + f * (0.2 - (-0.2));
+
+            vertex[1] = vertex[1] + rand_z;
+        }
+    }
+
     // PLANE XZ - TO TEST
     void generatePlaneXZ(int h, int w,
                          std::vector<unsigned short> &indices,

@@ -29,29 +29,33 @@ float verticalAngle = 0.0f;
 // Initial Field of View
 float initialFoV = 45.0f;
 
-float speed = 2.0f; // 3 units / second
-float mouseSpeed = 0.0005f;
+float speed = 1.0f; // 3 units / second
+float mouseSpeed = 0.00005f;
 
 
-void computeMatricesFromInputs(){
+void computeMatricesFromInputs() {
 
-	// glfwGetTime is called only once, the first time this function is called
-	static double lastTime = glfwGetTime();
+    // glfwGetTime is called only once, the first time this function is called
+    static double lastTime = glfwGetTime();
 
-	// Compute time difference between current and last frame
-	double currentTime = glfwGetTime();
-	float deltaTime = float(currentTime - lastTime);
+    // Compute time difference between current and last frame
+    double currentTime = glfwGetTime();
+    float deltaTime = float(currentTime - lastTime);
 
-	// Get mouse position
-	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
+    // Get mouse position
+    double xpos, ypos;
+    glfwGetCursorPos(window, &xpos, &ypos);
 
-	// Reset mouse position for next frame
-	glfwSetCursorPos(window, 1024/2, 768/2);
+    // Reset mouse position for next frame
+    int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    if (state == GLFW_PRESS) {
+        glfwSetCursorPos(window, 1024 / 2, 768 / 2);
 
-	// Compute new orientation
-	horizontalAngle += mouseSpeed * float(1024/2 - xpos );
-	verticalAngle   += mouseSpeed * float( 768/2 - ypos );
+
+        // Compute new orientation
+        horizontalAngle += mouseSpeed * float(1024 / 2 - xpos);
+        verticalAngle += mouseSpeed * float(768 / 2 - ypos);
+    }
 
 	// Direction : Spherical coordinates to Cartesian coordinates conversion
 	glm::vec3 direction(

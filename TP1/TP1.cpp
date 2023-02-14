@@ -40,7 +40,7 @@ glm::mat4 Projection_Matrix;
 glm::mat4 Model_Matrix;
 
 // camera
-glm::vec3 camera_position   = glm::vec3(0.0f, 3.0f,  3.0f);
+glm::vec3 camera_position   = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 camera_target = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
 
@@ -133,7 +133,8 @@ int main( void )
     Plane *planeXY = new Plane(1.6, 1.6);
     planeXY->generatePlaneXY(16, 16, indices, triangles, indexed_vertices, coord_texture);
     //planeXY->generatePlaneXZ(16, 16, indices, triangles, indexed_vertices, coord_texture);
-    planeXY->addZRelief(indexed_vertices);
+    //planeXY->addZRelief(indexed_vertices);
+    //planeXY->addYRelief(indexed_vertices);
 
     // Load it into a VBO
 
@@ -168,7 +169,7 @@ int main( void )
 
     // on charge et on genere la texture a l'aide de l'image texture (.png)
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("textures/carre.jpg", &width , &height , &nrChannels , 0);
+    unsigned char *data = stbi_load("textures/snow.jpg", &width , &height , &nrChannels , 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE , data);
         glGenerateMipmap(GL_TEXTURE_2D); }
@@ -213,6 +214,7 @@ int main( void )
 
         /*****************TODO***********************/
         //Model_Matrix = glm::mat4(1.0f); // specifies diagonal of 1's
+        //Model_Matrix = glm::mat4(1.0f);
 
         // View matrix : camera/view transformation lookat() utiliser camera_position camera_target camera_up
         //View_Matrix = glm::lookAt(camera_position, camera_target + camera_position, camera_up);
@@ -223,7 +225,7 @@ int main( void )
         computeMatricesFromInputs();
 
         View_Matrix = getViewMatrix();
-        Model_Matrix = glm::mat4(1.0f); // identity matrix (model will be at the origin) then change
+        Model_Matrix = glm::mat4(); // identity matrix (model will be at the origin) then change
         Projection_Matrix = getProjectionMatrix();
 
         // Send our transformation to the currently bound shader,
@@ -231,7 +233,6 @@ int main( void )
         glUniformMatrix4fv(glGetUniformLocation(programID, "model_matrix"), 1, GL_FALSE, &Model_Matrix[0][0]); // location, count, transpose, value
         glUniformMatrix4fv(glGetUniformLocation(programID, "view_matrix"), 1, GL_FALSE, &View_Matrix[0][0]);
         glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);
-
 
         /****************************************/
 
