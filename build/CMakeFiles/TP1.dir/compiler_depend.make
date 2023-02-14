@@ -322,7 +322,9 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   /usr/include/string.h \
   /usr/include/strings.h \
   /usr/include/c++/11/math.h \
-  ../TP1/Plane.h
+  ../TP1/Plane.h \
+  ../TP1/GLTexture.h \
+  ../TP1/Texture.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
   /usr/include/stdc-predef.h \
@@ -1423,6 +1425,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 
 /usr/include/GL/glext.h:
 
+../TP1/Texture.h:
+
 /usr/include/c++/11/math.h:
 
 /usr/include/strings.h:
@@ -1804,6 +1808,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
 /usr/include/c++/11/cctype:
+
+../TP1/GLTexture.h:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 

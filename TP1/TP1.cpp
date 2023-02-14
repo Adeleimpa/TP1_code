@@ -27,17 +27,15 @@ using namespace glm;
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "Plane.h"
+#include "GLTexture.h"
+#include "Texture.h"
+#include "Camera.h"
 
 void processInput(GLFWwindow *window);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
-// MVP
-glm::mat4 View_Matrix;
-glm::mat4 Projection_Matrix;
-glm::mat4 Model_Matrix;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0f, 0.0f,  3.0f);
@@ -156,7 +154,12 @@ int main( void )
     // ---------------------------------------------------------------------------------------------------------
     // texture
     // ---------------------------------------------------------------------------------------------------------
-    unsigned int texture;
+    GLTexture * initial_texture = new GLTexture();
+    initial_texture->generateBuffer(coord_texture);
+    initial_texture->generateTexture();
+    initial_texture->loadTexture("textures/snow.jpg");
+    initial_texture->defineParameters();
+    /*unsigned int texture;
     GLuint buffer_coord_txt;
 
     // on cree un buffer pour les textures
@@ -169,7 +172,7 @@ int main( void )
 
     // on charge et on genere la texture a l'aide de l'image texture (.png)
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("textures/texture.png", &width , &height , &nrChannels , 0);
+    unsigned char *data = stbi_load("textures/snow.jpg", &width , &height , &nrChannels , 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE , data);
         glGenerateMipmap(GL_TEXTURE_2D); }
@@ -183,7 +186,7 @@ int main( void )
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);*/
     // ---------------------------------------------------------------------------------------------------------
 
 
@@ -215,8 +218,9 @@ int main( void )
         // ---------------------------------------------------------------------------------
         // CAMERA
         // ---------------------------------------------------------------------------------
-
-        computeMatricesFromInputs();
+        Camera *camera = new Camera();
+        camera->MVP(programID);
+        /*computeMatricesFromInputs();
 
         View_Matrix = getViewMatrix();
         Model_Matrix = glm::mat4(); // identity matrix (model will be at the origin) then change
@@ -226,7 +230,7 @@ int main( void )
         // in the "Model View Projection" to the shader uniforms
         glUniformMatrix4fv(glGetUniformLocation(programID, "model_matrix"), 1, GL_FALSE, &Model_Matrix[0][0]); // location, count, transpose, value
         glUniformMatrix4fv(glGetUniformLocation(programID, "view_matrix"), 1, GL_FALSE, &View_Matrix[0][0]);
-        glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);
+        glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);*/
 
         // ---------------------------------------------------------------------------------
 
@@ -246,15 +250,7 @@ int main( void )
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
         // texture
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
-        int indexActiveTexture = 0;// 0 to 31
-        glBindTexture(GL_TEXTURE_2D , texture); // bind texture as Texture 0
-        glActiveTexture(GL_TEXTURE0 + indexActiveTexture);
-        // set used active texture (Modern OpenGL)
-        GLuint loc2 = glGetUniformLocation(programID, "texture_local");
-        glUniform1i(loc2, indexActiveTexture);
-        glEnableVertexAttribArray(2);
+        initial_texture->sendTextureToShader(programID);
 
         // glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see triangles of plan
 
