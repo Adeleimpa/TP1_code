@@ -186,24 +186,10 @@ int main( void )
         glUseProgram(programID);
 
 
-        // ---------------------------------------------------------------------------------
         // CAMERA
-        // ---------------------------------------------------------------------------------
         Camera *camera = new Camera();
         camera->MVP(programID);
-        /*computeMatricesFromInputs();
-
-        View_Matrix = getViewMatrix();
-        Model_Matrix = glm::mat4(); // identity matrix (model will be at the origin) then change
-        Projection_Matrix = getProjectionMatrix();
-
-        // Send our transformation to the currently bound shader,
-        // in the "Model View Projection" to the shader uniforms
-        glUniformMatrix4fv(glGetUniformLocation(programID, "model_matrix"), 1, GL_FALSE, &Model_Matrix[0][0]); // location, count, transpose, value
-        glUniformMatrix4fv(glGetUniformLocation(programID, "view_matrix"), 1, GL_FALSE, &View_Matrix[0][0]);
-        glUniformMatrix4fv(glGetUniformLocation(programID, "proj_matrix"), 1, GL_FALSE, &Projection_Matrix[0][0]);*/
-
-        // ---------------------------------------------------------------------------------
+        
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
