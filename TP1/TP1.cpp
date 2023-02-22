@@ -122,20 +122,23 @@ int main( void )
     std::vector<glm::vec3> normals;
 
     // Loading mesh file
-    //std::string filename("chair.off");
+    //std::string filename("suzanne.off");
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
     // TP1: generate plane -> fill arrays of indices, triangles and indexed_vertices
     Plane *plane = new Plane(3.0, 3.0);
-    //plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'z');
+    //plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
     //plane->addRelief(indexed_vertices, 'z');
 
     // TP2: use height map
     Texture *height_map = new Texture();
-    height_map->readTexture("textures/Heightmap_Mountain128.png");
-    plane->generatePlane(height_map->height, height_map->width, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
+    height_map->readPGMTexture("textures/Heightmap_Mountain128.pgm");
+    plane->generatePlane(height_map->height, height_map->width,
+                         indices, triangles, indexed_vertices, normals,
+                         coord_texture, 'z');
     //plane->addRelief(indexed_vertices, 'z');
-    plane->addHeightMap(height_map->data, height_map->height, height_map->width, indexed_vertices, 'y');
+    plane->addHeightMap(height_map->data, height_map->height, height_map->width,
+                        indexed_vertices, 'z');
 
     // Load data (vertices, meshes, etc.) into VBO's
 
@@ -211,7 +214,7 @@ int main( void )
         // texture
         initial_texture->sendTextureToShader(programID);
 
-        // glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see triangles of plan
+        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see triangles of plan
 
         // Draw the triangles !
         glDrawElements(
