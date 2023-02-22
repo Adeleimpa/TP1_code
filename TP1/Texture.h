@@ -5,6 +5,9 @@
 #ifndef TP1_CODE_TEXTURE_H
 #define TP1_CODE_TEXTURE_H
 
+#include "image_ppm.h"
+#include <iostream>
+
 
 class Texture {
 
@@ -20,6 +23,18 @@ public:
 
         if (data) {} else { std::cout << "Failed to load texture" << std::endl; }
         stbi_image_free(data);
+    }
+
+    void readPGMTexture(char imagepath[]) {
+        lire_nb_lignes_colonnes_image_pgm(imagepath, &width, &height);
+        allocation_tableau(data, OCTET, width*height);
+        lire_image_pgm(imagepath, data, width*height);
+
+        /*for (int i = 0; i < nH; i++){
+            for (int j = 0; j < nW; j++) {
+                std::cout << (int) data[i*nW + j] << std::endl;
+            }
+        }*/
     }
 
 };
