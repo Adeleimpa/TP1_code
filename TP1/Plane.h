@@ -132,26 +132,38 @@ public:
     }
 
     void addHeightMap(unsigned char *HM_data, int height, int width, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
-        double range_max_min = 0.4;
-        double min = -range_max_min/2.0;
+        double max = 0.8; // maximum height
+        double min = 0.0; // minimum height
 
-        int HM_min = INT_MAX;
-        int HM_max = INT_MIN;
+        int HM_min = INT_MAX; // lowest ndg in HeightMap
+        int HM_max = INT_MIN; // highest ndg in HeightMap
 
         for(int i = 0; i < height*width; i++){
-            int dat = (int)HM_data[i];
+            int dat = (int) HM_data[i];
             if(dat < HM_min){ HM_min = dat; }
             if(dat > HM_max){ HM_max = dat; }
         }
-        int nr_ndg = HM_max - HM_min;
+        int range_ndg_HM = HM_max - HM_min; // 255 in principle
 
+        int count = 0;
         for(int i = 0; i < indexed_vertices.size(); i++){
+            //std::cout << indexed_vertices.size() << std::endl;
+            //std::cout << width*height << std::endl;
 
-            int dat = (int)HM_data[i];
-            std::cout << "data :" << dat << std::endl;
-            double ratio = (double)dat/(double)nr_ndg;
-            double difference = range_max_min*ratio;
-            std::cout << "difference :" << difference << std::endl;
+            int dat;
+
+            if(i%width == 0 || i > width * height + height +1){
+                count++;
+                dat = 0;
+            }else{
+                dat = (int) HM_data[i];
+            }
+
+            //std::cout << "data HeightMap :" << dat << std::endl;
+            double ratio = (double)dat/(double)range_ndg_HM;
+            //std::cout << "ratio :" << ratio << std::endl;
+            double difference = max*ratio;
+            //std::cout << "difference :" << difference << std::endl;
 
             if(fix_coord == 'x'){
                 indexed_vertices[i][0] = min + difference;
@@ -159,9 +171,11 @@ public:
                 indexed_vertices[i][1] = min + difference;
             }else if(fix_coord == 'z'){
                 indexed_vertices[i][2] = min + difference;
+                //std::cout << "new coord (z) :" << indexed_vertices[i][2] << std::endl;
             }
 
         }
+        //std::cout << count << std::endl;
     }
 
 };
