@@ -136,20 +136,10 @@ public:
         double max = 0.8; // maximum height
         double min = 0.0; // minimum height
 
-        int HM_min = INT_MAX; // lowest ndg in HeightMap
-        int HM_max = INT_MIN; // highest ndg in HeightMap
-
-        for(int i = 0; i < height*width; i++){
-            int dat = (int) HM_data[i];
-            if(dat < HM_min){ HM_min = dat; }
-            if(dat > HM_max){ HM_max = dat; }
-        }
-        int range_ndg_HM = HM_max - HM_min; // 255 in principle
+        int range_ndg_HM = 256;
 
         for(int i = 0; i < indexed_vertices.size(); i++){
-
             int dat = (int) HM_data[i];
-
             //std::cout << "data HeightMap :" << dat << std::endl;
             double ratio = (double)dat/(double)range_ndg_HM;
             //std::cout << "ratio :" << ratio << std::endl;
