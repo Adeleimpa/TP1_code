@@ -133,7 +133,7 @@ int main( void )
     // TP2: use height map
     Texture *height_map = new Texture();
     height_map->readPGMTexture("textures/Heightmap_Mountain128.pgm");
-    plane->generatePlane(height_map->height, height_map->width,
+    plane->generatePlane(height_map->height-1, height_map->width-1,
                          indices, triangles, indexed_vertices, normals,
                          coord_texture, 'z');
     //plane->addRelief(indexed_vertices, 'z');

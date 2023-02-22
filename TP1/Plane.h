@@ -146,19 +146,11 @@ public:
         }
         int range_ndg_HM = HM_max - HM_min; // 255 in principle
 
-        int count = 0;
         for(int i = 0; i < indexed_vertices.size(); i++){
-            //std::cout << indexed_vertices.size() << std::endl;
-            //std::cout << width*height << std::endl;
+            std::cout << indexed_vertices.size() << std::endl;
+            std::cout << width*height << std::endl;
 
-            int dat;
-
-            if(i%width == 0 || i > width * height + height +1){ // TODO maybe incorrect
-                count++;
-                dat = 0;
-            }else{
-                dat = (int) HM_data[i];
-            }
+            int dat = (int) HM_data[i];
 
             //std::cout << "data HeightMap :" << dat << std::endl;
             double ratio = (double)dat/(double)range_ndg_HM;
@@ -174,9 +166,7 @@ public:
                 indexed_vertices[i][2] = min + difference;
                 //std::cout << "new coord (z) :" << indexed_vertices[i][2] << std::endl;
             }
-
         }
-        //std::cout << count << std::endl;
     }
 
 };
