@@ -30,9 +30,9 @@ public:
         allocation_tableau(data, OCTET, width*height);
         lire_image_pgm(imagepath, data, width*height);
 
-        /*for (int i = 0; i < nH; i++){
-            for (int j = 0; j < nW; j++) {
-                std::cout << (int) data[i*nW + j] << std::endl;
+        /*for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++) {
+                std::cout << (int) data[i*width + j] << std::endl;
             }
         }*/
     }

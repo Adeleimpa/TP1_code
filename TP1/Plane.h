@@ -131,6 +131,7 @@ public:
         }
     }
 
+    // TODO doesn't work perfectly well
     void addHeightMap(unsigned char *HM_data, int height, int width, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
         double max = 0.8; // maximum height
         double min = 0.0; // minimum height
@@ -152,7 +153,7 @@ public:
 
             int dat;
 
-            if(i%width == 0 || i > width * height + height +1){
+            if(i%width == 0 || i > width * height + height +1){ // TODO maybe incorrect
                 count++;
                 dat = 0;
             }else{
