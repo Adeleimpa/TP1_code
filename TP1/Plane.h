@@ -147,8 +147,6 @@ public:
         int range_ndg_HM = HM_max - HM_min; // 255 in principle
 
         for(int i = 0; i < indexed_vertices.size(); i++){
-            std::cout << indexed_vertices.size() << std::endl;
-            std::cout << width*height << std::endl;
 
             int dat = (int) HM_data[i];
 
