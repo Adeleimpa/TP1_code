@@ -325,6 +325,7 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   ../TP1/Plane.h \
   ../TP1/GLTexture.h \
   ../TP1/Texture.h \
+  ../TP1/image_ppm.h \
   ../TP1/Camera.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
@@ -1571,6 +1572,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 /usr/include/c++/11/bits/stl_construct.h:
 
 /usr/include/c++/11/tr1/exp_integral.tcc:
+
+../TP1/image_ppm.h:
 
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
