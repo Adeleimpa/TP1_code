@@ -30,8 +30,9 @@ public:
         data = stbi_load(path, &width , &height , &nrChannels , 0);
 
         if (data) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE , data);
-            glGenerateMipmap(GL_TEXTURE_2D); }
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
         else {
             std::cout << "Failed to load texture" << std::endl;
         }
@@ -46,15 +47,14 @@ public:
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     }
 
-    void sendTextureToShader(GLuint programID){
+    void sendTextureToShader(GLuint programID, const GLchar *texture_shader_name, int indexActiveTexture){
         glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
-        int indexActiveTexture = 0;// 0 to 31
-        glBindTexture(GL_TEXTURE_2D , texture); // bind texture as Texture 0
         glActiveTexture(GL_TEXTURE0 + indexActiveTexture);
+        glBindTexture(GL_TEXTURE_2D , texture);
         // set used active texture (Modern OpenGL)
-        GLuint loc2 = glGetUniformLocation(programID, "texture_local");
-        glUniform1i(loc2, indexActiveTexture);
+        GLuint location = glGetUniformLocation(programID, texture_shader_name);
+        glUniform1i(location, indexActiveTexture);
         glEnableVertexAttribArray(2);
     }
 

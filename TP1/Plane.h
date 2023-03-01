@@ -133,7 +133,7 @@ public:
 
     // TODO doesn't work perfectly well
     void addHeightMap(unsigned char *HM_data, int height, int width, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
-        double max = 0.8; // maximum height
+        double max = 1.0; // maximum height
         double min = 0.0; // minimum height
 
         int range_ndg_HM = 256;

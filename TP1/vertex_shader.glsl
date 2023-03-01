@@ -15,6 +15,9 @@ mat4 transformation_matrix;
 out vec2 coord_txt;
 layout(location = 2) in vec2 coord;
 
+// heightmap
+out float height;
+
 void main(){
 
         transformation_matrix = proj_matrix * view_matrix * model_matrix; // MVP but inverted! (order matters)
@@ -24,5 +27,7 @@ void main(){
         //gl_Position = vec4(vertices_position_modelspace, 1);
 
         coord_txt = coord; // texture
+
+        height = gl_Position.z; // clip space position
 }
 

@@ -159,11 +159,23 @@ int main( void )
 
 
     // texture
-    GLTexture * initial_texture = new GLTexture();
-    initial_texture->generateBuffer(coord_texture);
-    initial_texture->generateTexture();
-    initial_texture->loadTexture("textures/texture.png");
-    initial_texture->defineParameters();
+    GLTexture * grass_texture = new GLTexture();
+    grass_texture->generateBuffer(coord_texture);
+    grass_texture->generateTexture();
+    grass_texture->loadTexture("textures/grass.png");
+    grass_texture->defineParameters();
+
+    GLTexture * rock_texture = new GLTexture();
+    rock_texture->generateBuffer(coord_texture);
+    rock_texture->generateTexture();
+    rock_texture->loadTexture("textures/rock.png");
+    rock_texture->defineParameters();
+
+    GLTexture * snowrocks_texture = new GLTexture();
+    snowrocks_texture->generateBuffer(coord_texture);
+    snowrocks_texture->generateTexture();
+    snowrocks_texture->loadTexture("textures/snowrocks.png");
+    snowrocks_texture->defineParameters();
 
 
     // For speed computation
@@ -171,7 +183,6 @@ int main( void )
     int nbFrames = 0;
 
     do{
-
         // Measure speed
         // per-frame time logic
         // --------------------
@@ -212,7 +223,9 @@ int main( void )
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
         // texture
-        initial_texture->sendTextureToShader(programID);
+        grass_texture->sendTextureToShader(programID, "texture_grass", 0);
+        rock_texture->sendTextureToShader(programID, "texture_rock", 1);
+        snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
 
         //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see triangles of plan
 
