@@ -45,9 +45,7 @@
   <component name="ChangeListManager">
     <list default="true" id="680caa9c-3924-449d-86dc-26a773c13fd0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/Plane.h" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/Plane.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1/fragment_shader.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/fragment_shader.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/vertex_shader.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/vertex_shader.glsl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -268,7 +266,7 @@
       <workItem from="1676198599670" duration="4724000" />
       <workItem from="1676324346647" duration="16513000" />
       <workItem from="1677095327199" duration="7588000" />
-      <workItem from="1677661271995" duration="9863000" />
+      <workItem from="1677661271995" duration="11278000" />
     </task>
     <servers />
   </component>
