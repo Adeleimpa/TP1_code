@@ -16,6 +16,7 @@ GLFWwindow* window;
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+
 using namespace glm;
 
 #include <common/shader.hpp>
@@ -32,6 +33,7 @@ using namespace glm;
 #include "Camera.h"
 
 void processInput(GLFWwindow *window);
+void key (GLFWwindow *window, int key, int scancode, int action, int mods );
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -70,6 +72,12 @@ int main( void )
 
     // Open a window and create its OpenGL context
     window = glfwCreateWindow( 1024, 768, "TP1 - GLFW", NULL, NULL);
+
+    // key
+    glfwSetKeyCallback(window, key);
+    int screen_width, screen_height;
+    glfwGetFramebufferSize(window, &screen_width, &screen_height);
+
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -135,10 +143,10 @@ int main( void )
     height_map->readPGMTexture("textures/Heightmap_Mountain128.pgm");
     plane->generatePlane(height_map->height-1, height_map->width-1,
                          indices, triangles, indexed_vertices, normals,
-                         coord_texture, 'z');
+                         coord_texture, 'y');
     //plane->addRelief(indexed_vertices, 'z');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                        indexed_vertices, 'z');
+                        indexed_vertices, 'y');
 
     // Load data (vertices, meshes, etc.) into VBO's
 
@@ -286,4 +294,35 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+
+
+void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
+
+    if( key == GLFW_KEY_EQUAL ){ // minus on macbook keyboard
+
+        // TODO decrease resolution
+        /*Plane plane_low_reso;
+        plane_low_reso->generatePlane(height_map->height-1, height_map->width-1,
+                             indices, triangles, indexed_vertices, normals,
+                             coord_texture, 'y');
+        //plane->addRelief(indexed_vertices, 'z');
+        plane_low_reso->addHeightMap(height_map->data, height_map->height, height_map->width,
+                            indexed_vertices, 'y');*/
+
+    }
+    else if( key == GLFW_KEY_SLASH ){ // plus on macbook keyboard
+
+        // TODO increase resolution
+    }
+
+    // TODO UPDATE BUFFERS
+    /*GLuint vertexbuffer;
+    glGenBuffers(1, &vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
+    GLuint elementbuffer;
+    glGenBuffers(1, &elementbuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);*/
 }
