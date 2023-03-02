@@ -28,6 +28,6 @@ void main(){
 
         coord_txt = coord; // texture
 
-        height = gl_Position.z; // clip space position
+        height = vertices_position_modelspace.z;
 }
 

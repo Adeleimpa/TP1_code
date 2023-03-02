@@ -152,7 +152,7 @@ public:
                 indexed_vertices[i][1] = min + difference;
             }else if(fix_coord == 'z'){
                 indexed_vertices[i][2] = min + difference;
-                //std::cout << "new coord (z) :" << indexed_vertices[i][2] << std::endl;
+                //std::cout << "new coord (z):" << indexed_vertices[i][2] << std::endl;
             }
         }
     }
