@@ -18,14 +18,14 @@ void main(){
 
         // color = vec3(0.2, 0.2,0.4);
 
-        if(height < 0.35){
-                //color = vec3(0.0, 0.0, 0.0); // black
+        if(height < 0.2){
+                //color = vec3(1.0, 1.0, 1.0); // white
                 FragColor = texture(texture_grass, coord_txt);
-        }else if (height >= 0.35 && height < 0.8){
+        }else if (height >= 0.2 && height < 0.7){
                 //color = vec3(0.5, 0.5, 0.5); // grey
                 FragColor = texture(texture_rock, coord_txt);
-        }else if (height >= 0.8){
-                //color = vec3(1.0, 1.0, 1.0); // white
+        }else if (height >= 0.7){
+                //color = vec3(0.0, 0.0, 0.0); // black
                 FragColor = texture(texture_snowrocks, coord_txt);
         }
 

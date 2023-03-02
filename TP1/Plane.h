@@ -131,14 +131,26 @@ public:
         }
     }
 
-    // TODO doesn't work perfectly well
+
     void addHeightMap(unsigned char *HM_data, int height, int width, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
         double max = 1.0; // maximum height
         double min = 0.0; // minimum height
 
+        // TODO adapt to any max and min value -> shader
+
         int range_ndg_HM = 256;
 
+        //int count = 0;
+        //int line = 0;
         for(int i = 0; i < indexed_vertices.size(); i++){
+
+            /*if(count%10 == 0){
+                line++;
+                std::cout << "LINE " << line << std::endl;
+            }
+            count++;*/
+
+
             int dat = (int) HM_data[i];
             //std::cout << "data HeightMap :" << dat << std::endl;
             double ratio = (double)dat/(double)range_ndg_HM;
@@ -147,11 +159,11 @@ public:
             //std::cout << "difference :" << difference << std::endl;
 
             if(fix_coord == 'x'){
-                indexed_vertices[i][0] = min + difference;
+                indexed_vertices[i][0] = max - difference;
             }else if(fix_coord == 'y'){
-                indexed_vertices[i][1] = min + difference;
+                indexed_vertices[i][1] = max - difference;
             }else if(fix_coord == 'z'){
-                indexed_vertices[i][2] = min + difference;
+                indexed_vertices[i][2] = max - difference;
                 //std::cout << "new coord (z):" << indexed_vertices[i][2] << std::endl;
             }
         }
