@@ -29,4 +29,6 @@ void main(){
                 FragColor = texture(texture_snowrocks, coord_txt);
         }
 
+        // TODO smooth mix of textures
+
 }
