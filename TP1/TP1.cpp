@@ -16,7 +16,6 @@ GLFWwindow* window;
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-
 using namespace glm;
 
 #include <common/shader.hpp>
@@ -31,6 +30,7 @@ using namespace glm;
 #include "GLTexture.h"
 #include "Texture.h"
 #include "Camera.h"
+
 
 void processInput(GLFWwindow *window);
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -51,6 +51,25 @@ float lastFrame = 0.0f;
 //rotation
 float angle = 0.;
 float zoom = 1.;
+
+float plane_len = 3.0;
+int plane_dim = 50;
+
+std::vector<unsigned short> indices; //Triangles concaténés dans une liste
+std::vector<std::vector<unsigned short> > triangles;
+std::vector<glm::vec3> indexed_vertices;
+std::vector<glm::vec2> coord_texture; // texture
+std::vector<glm::vec3> normals;
+
+Texture *height_map = new Texture();
+
+GLuint vertexbuffer, elementbuffer;
+
+GLTexture * grass_texture = new GLTexture();
+GLTexture * rock_texture = new GLTexture();
+GLTexture * snowrocks_texture = new GLTexture();
+
+GLuint programID;
 /*******************************************************************************/
 
 
@@ -120,42 +139,35 @@ int main( void )
     glBindVertexArray(VertexArrayID);
 
     // Create and compile our GLSL program from the shaders
-    GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
+    programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
 
-
-    std::vector<unsigned short> indices; //Triangles concaténés dans une liste
-    std::vector<std::vector<unsigned short> > triangles;
-    std::vector<glm::vec3> indexed_vertices;
-    std::vector<glm::vec2> coord_texture; // texture
-    std::vector<glm::vec3> normals;
 
     // Loading mesh file
     //std::string filename("suzanne.off");
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
     // TP1: generate plane -> fill arrays of indices, triangles and indexed_vertices
-    Plane *plane = new Plane(3.0, 3.0, 50, 50);
+    Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
     //plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
     //plane->addRelief(indexed_vertices, 'z');
 
     // TP2: use height map
-    Texture *height_map = new Texture();
+    //Texture *height_map = new Texture();
     height_map->readPGMTexture("textures/Heightmap_Mountain128.pgm");
     plane->generatePlane(indices, triangles, indexed_vertices, normals,
-                         coord_texture, 'z');
+                         coord_texture, 'y');
     //plane->addRelief(indexed_vertices, 'z');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                        indexed_vertices, 'z');
+                        indexed_vertices, 'y');
+    std::cout << "we now have " << indexed_vertices.size() << " vertices" << std::endl;
 
     // Load data (vertices, meshes, etc.) into VBO's
 
-    GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
 
     // Generate a buffer for the indices as well
-    GLuint elementbuffer;
     glGenBuffers(1, &elementbuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
@@ -166,20 +178,20 @@ int main( void )
 
 
     // texture
-    GLTexture * grass_texture = new GLTexture();
-    grass_texture->generateBuffer(coord_texture);
+    grass_texture->generateBuffer();
+    grass_texture->fillBuffer(coord_texture);
     grass_texture->generateTexture();
     grass_texture->loadTexture("textures/grass.png");
     grass_texture->defineParameters();
 
-    GLTexture * rock_texture = new GLTexture();
-    rock_texture->generateBuffer(coord_texture);
+    rock_texture->generateBuffer();
+    rock_texture->fillBuffer(coord_texture);
     rock_texture->generateTexture();
     rock_texture->loadTexture("textures/rock.png");
     rock_texture->defineParameters();
 
-    GLTexture * snowrocks_texture = new GLTexture();
-    snowrocks_texture->generateBuffer(coord_texture);
+    snowrocks_texture->generateBuffer();
+    snowrocks_texture->fillBuffer(coord_texture);
     snowrocks_texture->generateTexture();
     snowrocks_texture->loadTexture("textures/snowrocks.png");
     snowrocks_texture->defineParameters();
@@ -212,7 +224,6 @@ int main( void )
         // CAMERA
         Camera *camera = new Camera();
         camera->MVP(programID);
-
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -295,33 +306,73 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+void clearVectors(){
+    indexed_vertices.clear();
+    indices.clear();
+    triangles.clear();
+    normals.clear();
+    coord_texture.clear();
+}
+
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
-    if( key == GLFW_KEY_EQUAL ){ // minus on macbook keyboard
+    if( key == GLFW_KEY_EQUAL and action == GLFW_PRESS ){ // minus on macbook keyboard
 
-        // TODO decrease resolution
-        /*Plane plane_low_reso;
-        plane_low_reso->generatePlane(height_map->height-1, height_map->width-1,
-                             indices, triangles, indexed_vertices, normals,
-                             coord_texture, 'y');
-        //plane->addRelief(indexed_vertices, 'z');
-        plane_low_reso->addHeightMap(height_map->data, height_map->height, height_map->width,
-                            indexed_vertices, 'y');*/
+        /// DECREASE RESOLUTION
+
+        if(plane_dim > 13){
+            plane_dim -= 5;
+        }else{
+            plane_dim = 8;
+        }
+
 
     }
-    else if( key == GLFW_KEY_SLASH ){ // plus on macbook keyboard
+    else if( key == GLFW_KEY_SLASH and action == GLFW_PRESS ){ // plus on macbook keyboard
 
-        // TODO increase resolution
+        /// INCREASE RESOLUTION
+
+        if(plane_dim < 196){
+            plane_dim += 5;
+        }else{
+            plane_dim = 200;
+        }
+
+
+    }else if( key == GLFW_KEY_C and action == GLFW_PRESS ){
+
+
     }
 
-    // TODO UPDATE BUFFERS
-    /*GLuint vertexbuffer;
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
-    GLuint elementbuffer;
-    glGenBuffers(1, &elementbuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);*/
+    if( (key == GLFW_KEY_SLASH or key == GLFW_KEY_EQUAL) and action == GLFW_PRESS){
+
+        //std::cout << "dimension of plane : " << plane_dim << std::endl;
+
+        // CLEAN VECTORS
+        clearVectors();
+
+        // MAKE NEW PLANE
+        Plane *new_plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
+        new_plane->generatePlane(indices, triangles, indexed_vertices, normals,
+                                 coord_texture, 'y');
+        new_plane->addHeightMap(height_map->data, height_map->height, height_map->width,
+                                indexed_vertices, 'y');
+
+        //std::cout << "we now have " << indexed_vertices.size() << " vertices" << std::endl;
+
+        // UPDATE BUFFERS
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+
+        grass_texture->fillBuffer(coord_texture);
+        grass_texture->sendTextureToShader(programID, "texture_grass", 0);
+        rock_texture->fillBuffer(coord_texture);
+        rock_texture->sendTextureToShader(programID, "texture_rock", 0);
+        snowrocks_texture->fillBuffer(coord_texture);
+        snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 0);
+    }
+
 }

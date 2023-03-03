@@ -15,8 +15,11 @@ private:
     GLuint buffer_coord_txt;
 
 public:
-    void generateBuffer(std::vector<glm::vec2> & coord_texture){
+    void generateBuffer(){
         glGenBuffers(1, &buffer_coord_txt);
+    }
+
+    void fillBuffer(std::vector<glm::vec2> & coord_texture){
         glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
         glBufferData(GL_ARRAY_BUFFER, coord_texture.size() * sizeof(glm::vec2), &coord_texture[0], GL_STATIC_DRAW);
     }

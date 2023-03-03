@@ -5,7 +5,6 @@
 #ifndef TP1_CODE_CAMERA_H
 #define TP1_CODE_CAMERA_H
 
-
 class Camera {
 
 private:
@@ -13,6 +12,7 @@ private:
     glm::mat4 View_Matrix;
     glm::mat4 Projection_Matrix;
     glm::mat4 Model_Matrix;
+
 
 public:
     void MVP(GLuint programID){

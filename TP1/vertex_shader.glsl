@@ -28,6 +28,6 @@ void main(){
 
         coord_txt = coord; // texture
 
-        height = vertices_position_modelspace.z;
+        height = vertices_position_modelspace.y;
 }
 
