@@ -18,11 +18,16 @@ private:
     double width;
     double height;
 
+    int w;
+    int h;
+
 public:
     Plane() {}
-    Plane( double w , double h ) {
-        width = w;
-        height = h;
+    Plane( double wi , double he , int nw, int nh) {
+        width = wi;
+        height = he;
+        h = nw;
+        w = nh;
     }
 
     void addRelief(std::vector<glm::vec3> &indexed_vertices, char fix_coord){
@@ -42,13 +47,13 @@ public:
         }
     }
 
-    void generatePlane(int h, int w,
-                         std::vector<unsigned short> &indices,
+    void generatePlane(  std::vector<unsigned short> &indices,
                          std::vector<std::vector<unsigned short> > &triangles,
                          std::vector<glm::vec3> &indexed_vertices,
                          std::vector<glm::vec3> &normals,
                          std::vector<glm::vec2> &coord_texture,
                          char fix_coord){
+
 
         glm::vec3 start_corner;
 
@@ -132,9 +137,12 @@ public:
     }
 
 
-    void addHeightMap(unsigned char *HM_data, int height, int width, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
+    void addHeightMap(unsigned char *HM_data, int height_HM, int width_HM, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
         double max = 1.0; // maximum height
         double min = 0.0; // minimum height
+
+        int height_plane = h + 1;
+        int width_plane = w + 1;
 
         // TODO adapt to any max and min value -> shader
 
@@ -150,9 +158,23 @@ public:
             }
             count++;*/
 
+            //int dat = (int) HM_data[i]
+            int row = floor(i / height_plane);
+            float row_plane = (float)row/(float)height_plane;
+            int row_HM = floor(height_HM*row_plane);
+            int col = i - row*width_plane;
+            float col_plane = (float)col/(float)width_plane;
+            int col_HM = floor(width_HM*col_plane);
+            int dat = (int) HM_data[row_HM*width_HM + col_HM];
+            /*std::cout << "i :" << i << std::endl;
+            std::cout << "row:" << row << std::endl;
+            std::cout << "row plane:" << (float) row_plane << std::endl;
+            std::cout << "row HM:" << (float) row_HM << std::endl;
+            std::cout << "col:" << col << std::endl;
+            std::cout << "col plane:" << col_plane << std::endl;
+            std::cout << "col HL:" << col_HM << std::endl;
+            std::cout << "data HeightMap :" << dat << std::endl;*/
 
-            int dat = (int) HM_data[i];
-            //std::cout << "data HeightMap :" << dat << std::endl;
             double ratio = (double)dat/(double)range_ndg_HM;
             //std::cout << "ratio :" << ratio << std::endl;
             double difference = max*ratio;

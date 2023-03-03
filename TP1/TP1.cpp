@@ -134,19 +134,18 @@ int main( void )
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
     // TP1: generate plane -> fill arrays of indices, triangles and indexed_vertices
-    Plane *plane = new Plane(3.0, 3.0);
+    Plane *plane = new Plane(3.0, 3.0, 50, 50);
     //plane->generatePlane(16, 16, indices, triangles, indexed_vertices, normals, coord_texture, 'y');
     //plane->addRelief(indexed_vertices, 'z');
 
     // TP2: use height map
     Texture *height_map = new Texture();
     height_map->readPGMTexture("textures/Heightmap_Mountain128.pgm");
-    plane->generatePlane(height_map->height-1, height_map->width-1,
-                         indices, triangles, indexed_vertices, normals,
-                         coord_texture, 'y');
+    plane->generatePlane(indices, triangles, indexed_vertices, normals,
+                         coord_texture, 'z');
     //plane->addRelief(indexed_vertices, 'z');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                        indexed_vertices, 'y');
+                        indexed_vertices, 'z');
 
     // Load data (vertices, meshes, etc.) into VBO's
 
