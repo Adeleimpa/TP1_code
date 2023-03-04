@@ -5,23 +5,44 @@
 #ifndef TP1_CODE_CAMERA_H
 #define TP1_CODE_CAMERA_H
 
+#define PI 3.14159265
+
 class Camera {
 
 private:
+
+public:
+
     // MVP
     glm::mat4 View_Matrix;
     glm::mat4 Projection_Matrix;
     glm::mat4 Model_Matrix;
 
+    float angle_in_degrees = 1.;
 
-public:
-    void MVP(GLuint programID){
+    //int increment;
+
+    void MVP(bool cameraRotates, bool speedUp, bool slowDown){
         computeMatricesFromInputs();
 
         View_Matrix = getViewMatrix();
         Model_Matrix = glm::mat4(); // identity matrix (model will be at the origin) then change
         Projection_Matrix = getProjectionMatrix();
 
+        if(cameraRotates){
+
+            /*if(speedUp){
+                increment += 5;
+            }else if(slowDown){
+                if(increment > 5){increment -= 5;}
+            }else {
+                increment = 1;
+            }*/
+            Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees++), glm::vec3(0.0,1.0,0.0));
+        }
+    }
+
+    void sendMVPtoShader(GLuint programID){
         // Send our transformation to the currently bound shader,
         // in the "Model View Projection" to the shader uniforms
         glUniformMatrix4fv(glGetUniformLocation(programID, "model_matrix"), 1, GL_FALSE, &Model_Matrix[0][0]); // location, count, transpose, value

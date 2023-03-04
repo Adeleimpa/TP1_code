@@ -40,9 +40,15 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
+Camera *camera = new Camera();
 glm::vec3 camera_position   = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 camera_target = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
+float angle_in_degrees = 1.;
+bool cameraRotates = false;
+float cameraSpeed;
+bool speedUp = false;
+bool slowDown = false;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -61,10 +67,9 @@ std::vector<glm::vec3> indexed_vertices;
 std::vector<glm::vec2> coord_texture; // texture
 std::vector<glm::vec3> normals;
 
-Texture *height_map = new Texture();
-
 GLuint vertexbuffer, elementbuffer;
 
+Texture *height_map = new Texture();
 GLTexture * grass_texture = new GLTexture();
 GLTexture * rock_texture = new GLTexture();
 GLTexture * snowrocks_texture = new GLTexture();
@@ -159,7 +164,6 @@ int main( void )
     //plane->addRelief(indexed_vertices, 'z');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,
                         indexed_vertices, 'y');
-    std::cout << "we now have " << indexed_vertices.size() << " vertices" << std::endl;
 
     // Load data (vertices, meshes, etc.) into VBO's
 
@@ -222,8 +226,9 @@ int main( void )
 
 
         // CAMERA
-        Camera *camera = new Camera();
-        camera->MVP(programID);
+        camera->MVP(cameraRotates, speedUp, slowDown);
+        camera->sendMVPtoShader(programID);
+
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -254,6 +259,8 @@ int main( void )
                     GL_UNSIGNED_SHORT,   // type
                     (void*)0           // element array buffer offset
                     );
+
+
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(2); 
@@ -287,11 +294,15 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 
     //Camera zoom in and out
-    float cameraSpeed = 2.5 * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    // DOESNT DO ANYTHING NOW
+    /*cameraSpeed = 2.5 * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // Z on azerty keyboard
+        std::cout << "w" << std::endl;
         camera_position += cameraSpeed * camera_target;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera_position -= cameraSpeed * camera_target;
+        std::cout << "s" << std::endl;
+        camera_position -= cameraSpeed * camera_target;*/
+
 
     //TODO add translations
 
@@ -327,7 +338,6 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
             plane_dim = 8;
         }
 
-
     }
     else if( key == GLFW_KEY_SLASH and action == GLFW_PRESS ){ // plus on macbook keyboard
 
@@ -342,6 +352,23 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
     }else if( key == GLFW_KEY_C and action == GLFW_PRESS ){
 
+        /// turn around axis
+
+        if(cameraRotates){
+            cameraRotates = false;
+        }else{
+            cameraRotates = true;
+        }
+
+    }else if( key == GLFW_KEY_Q and action == GLFW_PRESS ){ // A on macbook keyboard
+        // TODO accelerate camera
+        std::cout << key << std::endl;
+        speedUp = true;
+
+    }else if ( key == GLFW_KEY_B and action == GLFW_PRESS ){
+        // TODO slow down camera
+        std::cout << key << std::endl;
+        slowDown = true;
 
     }
 
