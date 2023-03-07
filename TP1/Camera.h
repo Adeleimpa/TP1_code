@@ -20,7 +20,7 @@ public:
 
     float angle_in_degrees = 1.;
 
-    //int increment;
+    float increment = 1.0;
 
     void MVP(bool cameraRotates, bool speedUp, bool slowDown){
         computeMatricesFromInputs();
@@ -31,14 +31,12 @@ public:
 
         if(cameraRotates){
 
-            /*if(speedUp){
-                increment += 5;
+            if(speedUp){
+                increment += 3.0;
             }else if(slowDown){
-                if(increment > 5){increment -= 5;}
-            }else {
-                increment = 1;
-            }*/
-            Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees++), glm::vec3(0.0,1.0,0.0));
+                increment /= 1.3;
+            }
+            Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=increment), glm::vec3(0.0,1.0,0.0));
         }
     }
 

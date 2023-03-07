@@ -227,6 +227,8 @@ int main( void )
 
         // CAMERA
         camera->MVP(cameraRotates, speedUp, slowDown);
+        speedUp = false;
+        slowDown = false;
         camera->sendMVPtoShader(programID);
 
 
@@ -360,14 +362,12 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
             cameraRotates = true;
         }
 
-    }else if( key == GLFW_KEY_Q and action == GLFW_PRESS ){ // A on macbook keyboard
-        // TODO accelerate camera
-        std::cout << key << std::endl;
+    }else if( key == GLFW_KEY_W and action == GLFW_PRESS ){ // Z on macbook keyboard
+        // accelerates camera
         speedUp = true;
 
-    }else if ( key == GLFW_KEY_B and action == GLFW_PRESS ){
-        // TODO slow down camera
-        std::cout << key << std::endl;
+    }else if ( key == GLFW_KEY_Z and action == GLFW_PRESS ){ // W on macbook leyboard
+        // slows down camera
         slowDown = true;
 
     }
