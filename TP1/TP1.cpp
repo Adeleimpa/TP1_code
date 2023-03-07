@@ -358,9 +358,14 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
         if(cameraRotates){
             cameraRotates = false;
+            setCamPosition(glm::vec3( 0, 0, 5));
+            setVerticalAngle(0.0f);
         }else{
             cameraRotates = true;
+            setCamPosition(glm::vec3( 0, 5, 5));
+            setVerticalAngle(-3.14f/4.0f);
         }
+
 
     }else if( key == GLFW_KEY_W and action == GLFW_PRESS ){ // Z on macbook keyboard
         // accelerates camera

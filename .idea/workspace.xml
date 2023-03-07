@@ -49,7 +49,10 @@
       <change beforePath="$PROJECT_DIR$/TP1/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1/TP1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/common/controls.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/common/controls.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/build/TP1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/controls.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/common/controls.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/controls.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/common/controls.hpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -270,7 +273,7 @@
       <workItem from="1676198599670" duration="4724000" />
       <workItem from="1676324346647" duration="16513000" />
       <workItem from="1677095327199" duration="7588000" />
-      <workItem from="1677661271995" duration="46206000" />
+      <workItem from="1677661271995" duration="47975000" />
     </task>
     <servers />
   </component>
