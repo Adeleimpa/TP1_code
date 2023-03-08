@@ -332,6 +332,8 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
     if( key == GLFW_KEY_EQUAL and action == GLFW_PRESS ){ // minus on macbook keyboard
 
+        std::cout << "You have pressed the key - : resolution decreases" << std::endl;
+
         /// DECREASE RESOLUTION
 
         if(plane_dim > 13){
@@ -343,6 +345,8 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
     }
     else if( key == GLFW_KEY_SLASH and action == GLFW_PRESS ){ // plus on macbook keyboard
 
+        std::cout << "You have pressed the key + : resolution increases" << std::endl;
+
         /// INCREASE RESOLUTION
 
         if(plane_dim < 196){
@@ -353,6 +357,8 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
 
     }else if( key == GLFW_KEY_C and action == GLFW_PRESS ){
+
+        std::cout << "You have pressed the key c : switch to orbital camera" << std::endl;
 
         /// turn around axis
 
@@ -368,11 +374,17 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
 
     }else if( key == GLFW_KEY_W and action == GLFW_PRESS ){ // Z on macbook keyboard
-        // accelerates camera
+
+        std::cout << "You have pressed the key Z : rotation speeds up" << std::endl;
+
+        /// accelerates camera
         speedUp = true;
 
     }else if ( key == GLFW_KEY_Z and action == GLFW_PRESS ){ // W on macbook leyboard
-        // slows down camera
+
+        std::cout << "You have pressed the key W : rotation slows down" << std::endl;
+
+        /// slows down camera
         slowDown = true;
 
     }
