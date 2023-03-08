@@ -22,7 +22,6 @@ void main(){
 
         transformation_matrix = proj_matrix * view_matrix * model_matrix; // MVP but inverted! (order matters)
 
-        // TODO : Output position of the vertex, in clip space : MVP * position
         gl_Position = transformation_matrix * vec4(vertices_position_modelspace, 1);
         //gl_Position = vec4(vertices_position_modelspace, 1);
 

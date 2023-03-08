@@ -32,7 +32,6 @@ using namespace glm;
 #include "Camera.h"
 
 
-void processInput(GLFWwindow *window);
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
 
 // settings
@@ -58,17 +57,21 @@ float lastFrame = 0.0f;
 float angle = 0.;
 float zoom = 1.;
 
+// plane data
 float plane_len = 3.0;
 int plane_dim = 50;
 
-std::vector<unsigned short> indices; //Triangles concaténés dans une liste
+// mesh data
+std::vector<unsigned short> indices; // Triangles concaténés dans une liste
 std::vector<std::vector<unsigned short> > triangles;
 std::vector<glm::vec3> indexed_vertices;
 std::vector<glm::vec2> coord_texture; // texture
 std::vector<glm::vec3> normals;
 
+// buffers
 GLuint vertexbuffer, elementbuffer;
 
+// height map and textures
 Texture *height_map = new Texture();
 GLTexture * grass_texture = new GLTexture();
 GLTexture * rock_texture = new GLTexture();
@@ -151,20 +154,17 @@ int main( void )
     //std::string filename("suzanne.off");
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
-    // TP1: generate plane -> fill arrays of indices, triangles and indexed_vertices
+    // generate plane -> fill arrays of indices, triangles and indexed_vertices
     Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
-
-    // TP2: use height map
-    //Texture *height_map = new Texture();
-    height_map->readPGMTexture("textures/Heightmap_Mountain128.pgm");
+    // use height map
+    height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
     plane->generatePlane(indices, triangles, indexed_vertices, normals,
                          coord_texture, 'y');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,
                         indexed_vertices, 'y');
 
     // Load data (vertices, meshes, etc.) into VBO's
-
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
@@ -183,19 +183,19 @@ int main( void )
     grass_texture->generateBuffer();
     grass_texture->fillBuffer(coord_texture);
     grass_texture->generateTexture();
-    grass_texture->loadTexture("textures/grass.png");
+    grass_texture->loadTexture((char*)"textures/grass.png");
     grass_texture->defineParameters();
 
     rock_texture->generateBuffer();
     rock_texture->fillBuffer(coord_texture);
     rock_texture->generateTexture();
-    rock_texture->loadTexture("textures/rock.png");
+    rock_texture->loadTexture((char*)"textures/rock.png");
     rock_texture->defineParameters();
 
     snowrocks_texture->generateBuffer();
     snowrocks_texture->fillBuffer(coord_texture);
     snowrocks_texture->generateTexture();
-    snowrocks_texture->loadTexture("textures/snowrocks.png");
+    snowrocks_texture->loadTexture((char*)"textures/snowrocks.png");
     snowrocks_texture->defineParameters();
 
 
@@ -210,10 +210,6 @@ int main( void )
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
-        // input
-        // -----
-        processInput(window);
 
 
         // Clear the screen
@@ -250,7 +246,7 @@ int main( void )
         rock_texture->sendTextureToShader(programID, "texture_rock", 1);
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
 
-        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see triangles of plan
+        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
 
         // Draw the triangles !
         glDrawElements(
@@ -259,7 +255,6 @@ int main( void )
                     GL_UNSIGNED_SHORT,   // type
                     (void*)0           // element array buffer offset
                     );
-
 
 
         glDisableVertexAttribArray(0);
@@ -285,28 +280,6 @@ int main( void )
     return 0;
 }
 
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    //Camera zoom in and out
-    // DOESNT DO ANYTHING NOW
-    /*cameraSpeed = 2.5 * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // Z on azerty keyboard
-        std::cout << "w" << std::endl;
-        camera_position += cameraSpeed * camera_target;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        std::cout << "s" << std::endl;
-        camera_position -= cameraSpeed * camera_target;*/
-
-
-    //TODO add translations
-
-}
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -378,7 +351,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         /// accelerates camera
         speedUp = true;
 
-    }else if ( key == GLFW_KEY_Z and action == GLFW_PRESS ){ // W on macbook leyboard
+    }else if ( key == GLFW_KEY_Z and action == GLFW_PRESS ){ // W on macbook keyboard
 
         std::cout << "You have pressed the key W : rotation slows down" << std::endl;
 
