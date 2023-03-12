@@ -66,7 +66,6 @@ float plane_len = 3.0;
 int plane_dim = 50;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
-
 // buffers
 GLuint vertexbuffer, elementbuffer;
 
@@ -163,15 +162,12 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
     //Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
-    //objects.push_back(plane);
+    objects.push_back(*plane);
 
     // use height map
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
-    plane->generatePlane(//indices, triangles, indexed_vertices, normals,coord_texture,
-                         'y');
-    plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                        //indexed_vertices,
-                        'y');
+    plane->generatePlane('y');
+    plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
     // generate buffers
     glGenBuffers(1, &vertexbuffer);
@@ -359,11 +355,8 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         // EDIT PLANE
         plane->setDimension(plane_dim, plane_dim);
         plane->clearVectors();
-        plane->generatePlane(//indices, triangles, indexed_vertices, normals,coord_texture,
-                                 'y');
-        plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                                //indexed_vertices,
-                                'y');
+        plane->generatePlane('y');
+        plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
         // UPDATE BUFFERS
         plane->loadBuffers(vertexbuffer, elementbuffer);
