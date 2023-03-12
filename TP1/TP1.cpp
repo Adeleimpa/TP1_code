@@ -30,6 +30,7 @@ using namespace glm;
 #include "GLTexture.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "SceneObject.h"
 
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -53,6 +54,9 @@ bool slowDown = false;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+// scene objects
+std::vector<SceneObject> objects;
+
 //rotation
 float angle = 0.;
 float zoom = 1.;
@@ -60,13 +64,8 @@ float zoom = 1.;
 // plane data
 float plane_len = 3.0;
 int plane_dim = 50;
+Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
-// mesh data
-std::vector<unsigned short> indices; // Triangles concaténés dans une liste
-std::vector<std::vector<unsigned short> > triangles;
-std::vector<glm::vec3> indexed_vertices;
-std::vector<glm::vec2> coord_texture; // texture
-std::vector<glm::vec3> normals;
 
 // buffers
 GLuint vertexbuffer, elementbuffer;
@@ -149,54 +148,59 @@ int main( void )
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
 
-
+    // ------------------------------------------------------------------------------------
+    // SUZANNE OBJECT
+    // ------------------------------------------------------------------------------------
     // Loading mesh file
-    //std::string filename("suzanne.off");
+    std::string filename("suzanne.off");
     //loadOFF(filename, indexed_vertices, indices, triangles );
 
+    // ------------------------------------------------------------------------------------
+
+
+    // ------------------------------------------------------------------------------------
+    // GENERATE TERRAIN
+    // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
+    //Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
+    //objects.push_back(plane);
 
     // use height map
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
-    plane->generatePlane(indices, triangles, indexed_vertices, normals,
-                         coord_texture, 'y');
+    plane->generatePlane(//indices, triangles, indexed_vertices, normals,coord_texture,
+                         'y');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                        indexed_vertices, 'y');
+                        //indexed_vertices,
+                        'y');
 
-    // Load data (vertices, meshes, etc.) into VBO's
+    // generate buffers
     glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
-
-    // Generate a buffer for the indices as well
     glGenBuffers(1, &elementbuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+    plane->loadBuffers(vertexbuffer, elementbuffer);
 
-    // Get a handle for our "LightPosition" uniform
-    glUseProgram(programID);
-    GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
-
-
-    // texture
+    // add textures
     grass_texture->generateBuffer();
-    grass_texture->fillBuffer(coord_texture);
+    grass_texture->fillBuffer(plane->coord_texture);
     grass_texture->generateTexture();
     grass_texture->loadTexture((char*)"textures/grass.png");
     grass_texture->defineParameters();
 
     rock_texture->generateBuffer();
-    rock_texture->fillBuffer(coord_texture);
+    rock_texture->fillBuffer(plane->coord_texture);
     rock_texture->generateTexture();
     rock_texture->loadTexture((char*)"textures/rock.png");
     rock_texture->defineParameters();
 
     snowrocks_texture->generateBuffer();
-    snowrocks_texture->fillBuffer(coord_texture);
+    snowrocks_texture->fillBuffer(plane->coord_texture);
     snowrocks_texture->generateTexture();
     snowrocks_texture->loadTexture((char*)"textures/snowrocks.png");
     snowrocks_texture->defineParameters();
+    // ------------------------------------------------------------------------------------
+
+    // Get a handle for our "LightPosition" uniform
+    glUseProgram(programID);
+    GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
 
 
     // For speed computation
@@ -218,13 +222,11 @@ int main( void )
         // Use our shader
         glUseProgram(programID);
 
-
         // CAMERA
         camera->MVP(cameraRotates, speedUp, slowDown);
         speedUp = false;
         slowDown = false;
         camera->sendMVPtoShader(programID);
-
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -251,7 +253,7 @@ int main( void )
         // Draw the triangles !
         glDrawElements(
                     GL_TRIANGLES,      // mode
-                    indices.size(),    // count
+                    plane->indices.size(),    // count
                     GL_UNSIGNED_SHORT,   // type
                     (void*)0           // element array buffer offset
                     );
@@ -288,14 +290,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-}
-
-void clearVectors(){
-    indexed_vertices.clear();
-    indices.clear();
-    triangles.clear();
-    normals.clear();
-    coord_texture.clear();
 }
 
 
@@ -362,31 +356,23 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
     if( (key == GLFW_KEY_SLASH or key == GLFW_KEY_EQUAL) and action == GLFW_PRESS){
 
-        //std::cout << "dimension of plane : " << plane_dim << std::endl;
-
-        // CLEAN VECTORS
-        clearVectors();
-
-        // MAKE NEW PLANE
-        Plane *new_plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
-        new_plane->generatePlane(indices, triangles, indexed_vertices, normals,
-                                 coord_texture, 'y');
-        new_plane->addHeightMap(height_map->data, height_map->height, height_map->width,
-                                indexed_vertices, 'y');
-
-        //std::cout << "we now have " << indexed_vertices.size() << " vertices" << std::endl;
+        // EDIT PLANE
+        plane->setDimension(plane_dim, plane_dim);
+        plane->clearVectors();
+        plane->generatePlane(//indices, triangles, indexed_vertices, normals,coord_texture,
+                                 'y');
+        plane->addHeightMap(height_map->data, height_map->height, height_map->width,
+                                //indexed_vertices,
+                                'y');
 
         // UPDATE BUFFERS
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+        plane->loadBuffers(vertexbuffer, elementbuffer);
 
-        grass_texture->fillBuffer(coord_texture);
+        grass_texture->fillBuffer(plane->coord_texture);
         grass_texture->sendTextureToShader(programID, "texture_grass", 0);
-        rock_texture->fillBuffer(coord_texture);
+        rock_texture->fillBuffer(plane->coord_texture);
         rock_texture->sendTextureToShader(programID, "texture_rock", 0);
-        snowrocks_texture->fillBuffer(coord_texture);
+        snowrocks_texture->fillBuffer(plane->coord_texture);
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 0);
     }
 

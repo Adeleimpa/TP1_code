@@ -278,6 +278,7 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/stb_image.h \
  /usr/include/string.h /usr/include/strings.h /usr/include/c++/11/math.h \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/Plane.h \
+ /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/SceneObject.h \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/GLTexture.h \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/Texture.h \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/image_ppm.h \

@@ -323,6 +323,7 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   /usr/include/strings.h \
   /usr/include/c++/11/math.h \
   ../TP1/Plane.h \
+  ../TP1/SceneObject.h \
   ../TP1/GLTexture.h \
   ../TP1/Texture.h \
   ../TP1/image_ppm.h \
@@ -2024,6 +2025,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 ../external/glm-0.9.7.1/glm/detail/precision.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+../TP1/SceneObject.h:
 
 /usr/include/c++/11/bits/postypes.h:
 

@@ -10,9 +10,10 @@
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
 
-class Plane {
+#include "SceneObject.h"
+
+class Plane : public SceneObject {
 
 private:
     double width;
@@ -30,7 +31,13 @@ public:
         w = nh;
     }
 
-    void addRelief(std::vector<glm::vec3> &indexed_vertices, char fix_coord){
+    void setDimension(int nw, int nh){
+        h = nw;
+        w = nh;
+    }
+
+    void addRelief(//std::vector<glm::vec3> &indexed_vertices,
+                   char fix_coord){
         for(int i = 0; i < indexed_vertices.size(); i++){
 
             double f = (double)rand() / RAND_MAX;
@@ -47,11 +54,11 @@ public:
         }
     }
 
-    void generatePlane(  std::vector<unsigned short> &indices,
-                         std::vector<std::vector<unsigned short> > &triangles,
-                         std::vector<glm::vec3> &indexed_vertices,
-                         std::vector<glm::vec3> &normals,
-                         std::vector<glm::vec2> &coord_texture,
+    void generatePlane(  //std::vector<unsigned short> &indices,
+                         //std::vector<std::vector<unsigned short> > &triangles,
+                         //std::vector<glm::vec3> &indexed_vertices,
+                         //std::vector<glm::vec3> &normals,
+                         //std::vector<glm::vec2> &coord_texture,
                          char fix_coord){
 
 
@@ -137,7 +144,9 @@ public:
     }
 
 
-    void addHeightMap(unsigned char *HM_data, int height_HM, int width_HM, std::vector<glm::vec3> &indexed_vertices, char fix_coord){
+    void addHeightMap(unsigned char *HM_data, int height_HM, int width_HM,
+                      //std::vector<glm::vec3> &indexed_vertices,
+                      char fix_coord){
         double max = 1.0; // maximum height
         double min = 0.0; // minimum height
         // TODO adapt to any max and min value -> shader
