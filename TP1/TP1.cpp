@@ -55,7 +55,7 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 // scene objects
-std::vector<SceneObject> objects;
+std::vector<SceneObject*> scene_objects;
 
 //rotation
 float angle = 0.;
@@ -162,7 +162,7 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
     //Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
-    objects.push_back(*plane);
+    scene_objects.push_back(plane);
 
     // use height map
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
@@ -247,12 +247,9 @@ int main( void )
         //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
 
         // Draw the triangles !
-        glDrawElements(
-                    GL_TRIANGLES,      // mode
-                    plane->indices.size(),    // count
-                    GL_UNSIGNED_SHORT,   // type
-                    (void*)0           // element array buffer offset
-                    );
+        for(SceneObject *obj: scene_objects){
+            obj->draw();
+        }
 
 
         glDisableVertexAttribArray(0);

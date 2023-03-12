@@ -23,8 +23,15 @@ public:
 
     SceneObject() {}
 
-    void draw(){
+    void draw() const {
+        if( triangles.size() == 0 ) return;
 
+        glEnableClientState(GL_VERTEX_ARRAY) ;
+        glEnableClientState (GL_NORMAL_ARRAY);
+        glNormalPointer (GL_FLOAT, 3*sizeof (float), (GLvoid*)(normals.data()));
+        glVertexPointer (3, GL_FLOAT, 3*sizeof (float) , (GLvoid*)(indexed_vertices.data()));
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+        // or try last arg = (void*)0
     }
 
     void loadBuffers(GLuint vertexbuffer, GLuint elementbuffer){
