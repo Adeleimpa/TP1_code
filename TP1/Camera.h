@@ -40,6 +40,18 @@ public:
         }
     }
 
+    void scaleModelMat(float coef){
+        Model_Matrix = glm::scale(Model_Matrix, vec3(coef, coef, coef));
+    }
+
+    void rotateModelMat(glm::vec3 axis){
+        Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees++), axis);
+    }
+
+    void translateModelMat(float x, float y, float z){
+        Model_Matrix = glm::translate(Model_Matrix, glm::vec3(x, y, z));
+    }
+
     void sendMVPtoShader(GLuint programID){
         // Send our transformation to the currently bound shader,
         // in the "Model View Projection" to the shader uniforms
