@@ -67,9 +67,6 @@ float plane_len = 3.0;
 int plane_dim = 50;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
-// buffers
-//GLuint vertexbuffer, elementbuffer;
-
 // height map and textures
 Texture *height_map = new Texture();
 GLTexture * grass_texture = new GLTexture();
@@ -153,10 +150,10 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // Load mesh file
     MeshObject *suzanne_mesh = new MeshObject();
-    std::string filename("suzanne.off");
+    std::string filename("data_off/suzanne.off");
     suzanne_mesh->create(filename);
     suzanne_mesh->generateBuffers();
-    //scene_objects.push_back(suzanne_mesh);
+    scene_objects.push_back(suzanne_mesh);
     // ------------------------------------------------------------------------------------
 
 
@@ -164,7 +161,7 @@ int main( void )
     // GENERATE TERRAIN
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    plane->setIsTerrain(1);
+    /*plane->setIsTerrain(1);
     plane->generateBuffers();
     scene_objects.push_back(plane);
 
@@ -190,7 +187,7 @@ int main( void )
     snowrocks_texture->fillBuffer(plane->coord_texture);
     snowrocks_texture->generateTexture();
     snowrocks_texture->loadTexture((char*)"textures/snowrocks.png");
-    snowrocks_texture->defineParameters();
+    snowrocks_texture->defineParameters();*/
     // ------------------------------------------------------------------------------------
 
     // Get a handle for our "LightPosition" uniform
