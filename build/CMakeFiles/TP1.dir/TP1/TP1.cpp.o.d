@@ -283,4 +283,5 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/Texture.h \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/image_ppm.h \
  /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/Camera.h \
- /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/MeshObject.h
+ /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/MeshObject.h \
+ /home/parallels/Desktop/Parallels\ Shared\ Folders/Home/Documents/Montpellier/UM/Semestre2/Moteur_de_Jeu/TPs/TP1_code/TP1/SceneGraph.h

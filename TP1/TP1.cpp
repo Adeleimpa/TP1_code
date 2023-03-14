@@ -32,6 +32,7 @@ using namespace glm;
 #include "Camera.h"
 #include "SceneObject.h"
 #include "MeshObject.h"
+#include "SceneGraph.h"
 
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -150,10 +151,29 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // Load mesh file
     MeshObject *suzanne_mesh = new MeshObject();
-    std::string filename("data_off/suzanne.off");
-    suzanne_mesh->create(filename);
+    std::string filename_suz("data_off/suzanne.off");
+    suzanne_mesh->create(filename_suz);
     suzanne_mesh->generateBuffers();
     scene_objects.push_back(suzanne_mesh);
+
+    // create scene graph
+    SceneGraph *root = new SceneGraph(*suzanne_mesh);
+    root->setLevel(0);
+
+    MeshObject *sphere = new MeshObject();
+    std::string filename_sphere("data_off/sphere.off");
+    sphere->create(filename_sphere);
+    sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
+    sphere->generateBuffers();
+    scene_objects.push_back(sphere);
+    SceneGraph node1 = root->addChild(*new SceneGraph(*sphere));
+
+    MeshObject *sphere2 = new MeshObject();
+    sphere2->create(filename_sphere);
+    sphere2->setColor(glm::vec4(0.0,0.0,1.0,0.0));
+    sphere2->generateBuffers();
+    scene_objects.push_back(sphere2);
+    SceneGraph node2 = node1.addChild(*new SceneGraph(*sphere2));
     // ------------------------------------------------------------------------------------
 
 
