@@ -52,7 +52,7 @@ public:
         // Index buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
-        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
+        glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
 
         glEnableClientState(GL_VERTEX_ARRAY) ;
         glEnableClientState (GL_NORMAL_ARRAY);
