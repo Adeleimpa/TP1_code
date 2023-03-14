@@ -18,6 +18,7 @@ layout(location = 2) in vec2 coord;
 // heightmap
 out float height;
 
+
 void main(){
 
         transformation_matrix = proj_matrix * view_matrix * model_matrix; // MVP but inverted! (order matters)

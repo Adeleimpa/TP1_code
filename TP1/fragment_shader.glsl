@@ -1,9 +1,8 @@
 #version 330 core
 
 // Ouput data
-out vec3 color;
-
-out vec4 FragColor;
+//(out) vec4 color;
+//(out) vec4 FragColor;
 
 // texture
 uniform sampler2D texture_grass;
@@ -18,43 +17,46 @@ float coef_grass;
 float coef_rock;
 float coef_snowrocks;
 
+uniform int isTerrain;
+
 void main(){
 
-        // color = vec3(0.2, 0.2,0.4);
+        //color = vec3(0.0, 0.0, 1.0);
 
-        if (height < 0.2){
-                //color = vec3(1.0, 1.0, 1.0); // white
-                FragColor = texture(texture_grass, coord_txt);
-        } else if (height >= 0.2 && height < 0.7){
-                //color = vec3(0.5, 0.5, 0.5); // grey
-                FragColor = texture(texture_rock, coord_txt);
-        } else if (height >= 0.7){
-                //color = vec3(0.0, 0.0, 0.0); // black
-                FragColor = texture(texture_snowrocks, coord_txt);
-        }
+        if(isTerrain == 0){
+                gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 
-        // SMOOTH : mix of textures
-        if (height >= 0.18 && height <= 0.22){
-                if(height - 0.2 < 0.0){
-                        coef_grass = 1.0 - height;
-                        coef_rock = 1.0 - coef_grass;
-                }else{
-                        coef_rock = 1.0 - height;
-                        coef_grass = 1.0 - coef_rock;
+        }else if(isTerrain == 1){
+
+                if (height < 0.2){
+                        gl_FragColor = texture(texture_grass, coord_txt);
+                } else if (height >= 0.2 && height < 0.7){
+                        gl_FragColor = texture(texture_rock, coord_txt);
+                } else if (height >= 0.7){
+                        gl_FragColor = texture(texture_snowrocks, coord_txt);
                 }
-                FragColor = coef_grass*texture(texture_grass, coord_txt) + coef_rock*texture(texture_rock, coord_txt);
-        }
 
-        if (height >= 0.68 && height <= 0.72){
-                if(height - 0.7 < 0.0){
-                        coef_snowrocks = 1.0 - height;
-                        coef_rock = 1.0 - coef_snowrocks;
-                }else{
-                        coef_rock = 1.0 - height;
-                        coef_snowrocks = 1.0 - coef_rock;
+                // SMOOTH : mix of textures
+                if (height >= 0.18 && height <= 0.22){
+                        if (height - 0.2 < 0.0){
+                                coef_grass = 1.0 - height;
+                                coef_rock = 1.0 - coef_grass;
+                        } else {
+                                coef_rock = 1.0 - height;
+                                coef_grass = 1.0 - coef_rock;
+                        }
+                        gl_FragColor = coef_grass*texture(texture_grass, coord_txt) + coef_rock*texture(texture_rock, coord_txt);
                 }
-                FragColor = coef_rock*texture(texture_rock, coord_txt) + coef_snowrocks*texture(texture_snowrocks, coord_txt);
+
+                if (height >= 0.68 && height <= 0.72){
+                        if (height - 0.7 < 0.0){
+                                coef_snowrocks = 1.0 - height;
+                                coef_rock = 1.0 - coef_snowrocks;
+                        } else {
+                                coef_rock = 1.0 - height;
+                                coef_snowrocks = 1.0 - coef_rock;
+                        }
+                        gl_FragColor = coef_rock*texture(texture_rock, coord_txt) + coef_snowrocks*texture(texture_snowrocks, coord_txt);
+                }
         }
-
-
 }

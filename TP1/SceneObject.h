@@ -21,20 +21,55 @@ public:
     std::vector<glm::vec2> coord_texture; // texture
     std::vector<glm::vec3> normals;
 
+    GLuint vertexbuffer, elementbuffer;
+
+    int isTerrain = 0;
+
     SceneObject() {}
 
-    void draw() const {
+    void setIsTerrain(int isTerrain){
+        this->isTerrain = isTerrain;
+    }
+
+    void draw(GLuint programID) const {
         if( triangles.size() == 0 ) return;
+
+        //std::cout << isTerrain << std::endl;
+        glUniform1i(glGetUniformLocation(programID, "isTerrain"), isTerrain);
+
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glVertexAttribPointer(
+                0,                  // attribute
+                3,                  // size
+                GL_FLOAT,           // type
+                GL_FALSE,           // normalized?
+                0,                  // stride
+                (void*)0            // array buffer offset
+        );
+
+        // Index buffer
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
+        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
 
         glEnableClientState(GL_VERTEX_ARRAY) ;
         glEnableClientState (GL_NORMAL_ARRAY);
         glNormalPointer (GL_FLOAT, 3*sizeof (float), (GLvoid*)(normals.data()));
         glVertexPointer (3, GL_FLOAT, 3*sizeof (float) , (GLvoid*)(indexed_vertices.data()));
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
-        // or try last arg = (void*)0
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(2);
     }
 
-    void loadBuffers(GLuint vertexbuffer, GLuint elementbuffer){
+    void generateBuffers(){
+        glGenBuffers(1, &vertexbuffer);
+        glGenBuffers(1, &elementbuffer);
+    }
+
+    void loadBuffers(){
         // Load data (vertices, meshes, etc.) into VBO's
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
@@ -42,6 +77,11 @@ public:
         // Generate a buffer for the indices as well
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+    }
+
+    void deleteBuffers(){
+        glDeleteBuffers(1, &vertexbuffer);
+        glDeleteBuffers(1, &elementbuffer);
     }
 
     void clearVectors(){

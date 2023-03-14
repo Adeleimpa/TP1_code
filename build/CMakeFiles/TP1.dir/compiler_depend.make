@@ -327,7 +327,8 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   ../TP1/GLTexture.h \
   ../TP1/Texture.h \
   ../TP1/image_ppm.h \
-  ../TP1/Camera.h
+  ../TP1/Camera.h \
+  ../TP1/MeshObject.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
   /usr/include/stdc-predef.h \
@@ -1447,6 +1448,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 ../external/glm-0.9.7.1/glm/gtc/matrix_transform.hpp:
 
 ../external/glm-0.9.7.1/glm/detail/func_integer.inl:
+
+../TP1/MeshObject.h:
 
 ../external/glm-0.9.7.1/glm/integer.hpp:
 

@@ -55,7 +55,6 @@ public:
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
         glActiveTexture(GL_TEXTURE0 + indexActiveTexture);
         glBindTexture(GL_TEXTURE_2D , texture);
-        // set used active texture (Modern OpenGL)
         GLuint location = glGetUniformLocation(programID, texture_shader_name);
         glUniform1i(location, indexActiveTexture);
         glEnableVertexAttribArray(2);

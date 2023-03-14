@@ -36,8 +36,7 @@ public:
         w = nh;
     }
 
-    void addRelief(//std::vector<glm::vec3> &indexed_vertices,
-                   char fix_coord){
+    void addRelief(char fix_coord){
         for(int i = 0; i < indexed_vertices.size(); i++){
 
             double f = (double)rand() / RAND_MAX;
@@ -54,12 +53,7 @@ public:
         }
     }
 
-    void generatePlane(  //std::vector<unsigned short> &indices,
-                         //std::vector<std::vector<unsigned short> > &triangles,
-                         //std::vector<glm::vec3> &indexed_vertices,
-                         //std::vector<glm::vec3> &normals,
-                         //std::vector<glm::vec2> &coord_texture,
-                         char fix_coord){
+    void generatePlane(char fix_coord){
 
 
         glm::vec3 start_corner;

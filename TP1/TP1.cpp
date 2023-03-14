@@ -31,6 +31,7 @@ using namespace glm;
 #include "Texture.h"
 #include "Camera.h"
 #include "SceneObject.h"
+#include "MeshObject.h"
 
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -67,7 +68,7 @@ int plane_dim = 50;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // buffers
-GLuint vertexbuffer, elementbuffer;
+//GLuint vertexbuffer, elementbuffer;
 
 // height map and textures
 Texture *height_map = new Texture();
@@ -150,10 +151,12 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // SUZANNE OBJECT
     // ------------------------------------------------------------------------------------
-    // Loading mesh file
+    // Load mesh file
+    MeshObject *suzanne_mesh = new MeshObject();
     std::string filename("suzanne.off");
-    //loadOFF(filename, indexed_vertices, indices, triangles );
-
+    suzanne_mesh->create(filename);
+    suzanne_mesh->generateBuffers();
+    //scene_objects.push_back(suzanne_mesh);
     // ------------------------------------------------------------------------------------
 
 
@@ -161,18 +164,14 @@ int main( void )
     // GENERATE TERRAIN
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    //Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
+    plane->setIsTerrain(1);
+    plane->generateBuffers();
     scene_objects.push_back(plane);
 
     // use height map
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
     plane->generatePlane('y');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
-
-    // generate buffers
-    glGenBuffers(1, &vertexbuffer);
-    glGenBuffers(1, &elementbuffer);
-    plane->loadBuffers(vertexbuffer, elementbuffer);
 
     // add textures
     grass_texture->generateBuffer();
@@ -224,36 +223,16 @@ int main( void )
         slowDown = false;
         camera->sendMVPtoShader(programID);
 
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(
-                    0,                  // attribute
-                    3,                  // size
-                    GL_FLOAT,           // type
-                    GL_FALSE,           // normalized?
-                    0,                  // stride
-                    (void*)0            // array buffer offset
-                    );
-
-        // Index buffer
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-
         // texture
         grass_texture->sendTextureToShader(programID, "texture_grass", 0);
         rock_texture->sendTextureToShader(programID, "texture_rock", 1);
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
 
-        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
-
         // Draw the triangles !
         for(SceneObject *obj: scene_objects){
-            obj->draw();
+            obj->loadBuffers();
+            obj->draw(programID);
         }
-
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(2); 
 
         // Swap buffers
         glfwSwapBuffers(window);
@@ -264,8 +243,9 @@ int main( void )
            glfwWindowShouldClose(window) == 0 );
 
     // Cleanup VBO and shader
-    glDeleteBuffers(1, &vertexbuffer);
-    glDeleteBuffers(1, &elementbuffer);
+    for(SceneObject *obj: scene_objects){
+        obj->deleteBuffers();
+    }
     glDeleteProgram(programID);
     glDeleteVertexArrays(1, &VertexArrayID);
 
@@ -356,7 +336,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
         // UPDATE BUFFERS
-        plane->loadBuffers(vertexbuffer, elementbuffer);
+        plane->loadBuffers();
 
         grass_texture->fillBuffer(plane->coord_texture);
         grass_texture->sendTextureToShader(programID, "texture_grass", 0);
