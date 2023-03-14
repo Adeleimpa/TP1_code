@@ -25,17 +25,26 @@ public:
 
     int isTerrain = 0;
 
+    glm::vec4 color = glm::vec4(0.0,0.0,0.0,0.0); // default value
+
     SceneObject() {}
 
     void setIsTerrain(int isTerrain){
         this->isTerrain = isTerrain;
     }
 
+    void setColor(glm::vec4 color){
+        this->color = color;
+    }
+
+
     void draw(GLuint programID) const {
         if( triangles.size() == 0 ) return;
 
         //std::cout << isTerrain << std::endl;
         glUniform1i(glGetUniformLocation(programID, "isTerrain"), isTerrain);
+
+        glUniform4f(glGetUniformLocation(programID, "mesh_color"), color[0], color[1], color[2], color[3]);
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);

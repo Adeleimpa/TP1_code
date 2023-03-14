@@ -19,12 +19,14 @@ float coef_snowrocks;
 
 uniform int isTerrain;
 
+uniform vec4 mesh_color;
+
 void main(){
 
         //color = vec3(0.0, 0.0, 1.0);
 
         if(isTerrain == 0){
-                gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                gl_FragColor = mesh_color;
 
         }else if(isTerrain == 1){
 

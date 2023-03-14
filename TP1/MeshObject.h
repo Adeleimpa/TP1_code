@@ -10,6 +10,9 @@
 
 class MeshObject : public SceneObject {
 
+private:
+
+
 public:
     void create(const std::string & filename){
         loadOFF(filename, indexed_vertices, indices, triangles );
