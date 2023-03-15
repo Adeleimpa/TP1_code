@@ -33,6 +33,7 @@ using namespace glm;
 #include "SceneObject.h"
 #include "MeshObject.h"
 #include "SceneGraph.h"
+#include "Transform.h"
 
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -58,6 +59,7 @@ float lastFrame = 0.0f;
 
 // scene objects
 std::vector<SceneObject*> scene_objects;
+Transform transformer; // to transform scene objects one by one
 
 //rotation
 float angle = 0.;
@@ -147,33 +149,33 @@ int main( void )
     programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
 
     // ------------------------------------------------------------------------------------
-    // SUZANNE OBJECT
+    // SOLAR SYSTEM
     // ------------------------------------------------------------------------------------
     // Load mesh file
-    MeshObject *suzanne_mesh = new MeshObject();
-    std::string filename_suz("data_off/suzanne.off");
-    suzanne_mesh->create(filename_suz);
-    suzanne_mesh->generateBuffers();
-    scene_objects.push_back(suzanne_mesh);
+    MeshObject *sun = new MeshObject();
+    std::string filename_sphere("data_off/sphere.off");
+    //std::string filename_suz("data_off/s.off");
+    sun->create(filename_sphere);
+    sun->setColor(glm::vec4(1.0,0.5,0.0,0.0));
+    sun->generateBuffers();
+    //scene_objects.push_back(suzanne_mesh);
 
     // create scene graph
-    SceneGraph *root = new SceneGraph(*suzanne_mesh);
+    SceneGraph *root = new SceneGraph(*sun);
     root->setLevel(0);
 
-    MeshObject *sphere = new MeshObject();
-    std::string filename_sphere("data_off/sphere.off");
-    sphere->create(filename_sphere);
-    sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
-    sphere->generateBuffers();
-    scene_objects.push_back(sphere);
-    SceneGraph node1 = root->addChild(*new SceneGraph(*sphere));
+    MeshObject *earth = new MeshObject();
+    earth->create(filename_sphere);
+    earth->setColor(glm::vec4(0.0,0.0,1.0,0.0));
+    earth->generateBuffers();
+    SceneGraph *node_earth = root->addChild(new SceneGraph(*earth));
 
-    MeshObject *sphere2 = new MeshObject();
-    sphere2->create(filename_sphere);
-    sphere2->setColor(glm::vec4(0.0,0.0,1.0,0.0));
-    sphere2->generateBuffers();
-    scene_objects.push_back(sphere2);
-    SceneGraph node2 = node1.addChild(*new SceneGraph(*sphere2));
+    MeshObject *moon = new MeshObject();
+    moon->create(filename_sphere);
+    moon->setColor(glm::vec4(0.5,0.5,0.5,0.0));
+    moon->generateBuffers();
+    scene_objects.push_back(moon);
+    SceneGraph *node_moon = node_earth->addChild(new SceneGraph(*moon));
     // ------------------------------------------------------------------------------------
 
 
@@ -246,10 +248,14 @@ int main( void )
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
 
         // Draw the triangles !
-        for(SceneObject *obj: scene_objects){
+        // terrain and objects
+        /*for(SceneObject *obj: scene_objects){
             obj->loadBuffers();
             obj->draw(programID);
-        }
+        }*/
+
+        // solar system
+        transformer.transformAndDraw(*root, programID, camera);
 
         // Swap buffers
         glfwSwapBuffers(window);

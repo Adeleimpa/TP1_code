@@ -329,7 +329,8 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   ../TP1/image_ppm.h \
   ../TP1/Camera.h \
   ../TP1/MeshObject.h \
-  ../TP1/SceneGraph.h
+  ../TP1/SceneGraph.h \
+  ../TP1/Transform.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
   /usr/include/stdc-predef.h \
@@ -1571,6 +1572,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 /usr/include/c++/11/backward/binders.h:
 
 /usr/include/c++/11/bits/functional_hash.h:
+
+../TP1/Transform.h:
 
 /usr/include/c++/11/bits/cxxabi_forced.h:
 

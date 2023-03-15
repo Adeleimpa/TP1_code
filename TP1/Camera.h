@@ -36,6 +36,7 @@ public:
             }else if(slowDown){
                 increment /= 1.3;
             }
+            std::cout << increment << std::endl;
             Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=increment), glm::vec3(0.0,1.0,0.0));
         }
     }
@@ -45,7 +46,7 @@ public:
     }
 
     void rotateModelMat(glm::vec3 axis){
-        Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees++), axis);
+        Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=0.27), axis);
     }
 
     void translateModelMat(float x, float y, float z){

@@ -14,7 +14,7 @@ class SceneGraph {
 
 private:
     SceneObject data;
-    std::vector<SceneGraph> children;
+    std::vector<SceneGraph*> children;
     SceneGraph* parent;
     int level;
 
@@ -32,21 +32,21 @@ public:
         return this->level;
     }
 
-    SceneGraph addChild(SceneGraph child) {
-        child.setParent(*this);
-        child.setLevel(this->getLevel()+1);
+    SceneGraph* addChild(SceneGraph *child) {
+        child->setParent(*this);
+        child->setLevel(this->getLevel()+1);
         this->children.push_back(child);
         return child;
     }
 
-    void addChildren(std::vector<SceneGraph> children) {
-        for(SceneGraph child :children){
+    void addChildren(std::vector<SceneGraph*> children) {
+        for(SceneGraph *child :children){
             this->children.push_back(child);
         }
     }
 
-    std::vector<SceneGraph> getChildren() {
-        return this->children;
+    std::vector<SceneGraph*> getChildren() {
+        return this->children; // TO SOLVE
     }
 
     SceneObject getData() {
