@@ -32,7 +32,7 @@ public:
         if(cameraRotates){
 
             if(speedUp){
-                increment += 3.0;
+                increment += 1.0;
             }else if(slowDown){
                 increment /= 1.3;
             }

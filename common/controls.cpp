@@ -40,6 +40,10 @@ void setVerticalAngle(float new_angle){
     verticalAngle = new_angle;
 }
 
+glm::vec3 getCamPosition(){
+    return position;
+}
+
 
 void computeMatricesFromInputs() {
 

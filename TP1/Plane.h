@@ -53,23 +53,22 @@ public:
         }
     }
 
-    void generatePlane(char fix_coord){
-
+    void generatePlane(char fix_coord, glm::vec3 center){
 
         glm::vec3 start_corner;
 
         if(fix_coord == 'x'){
-            start_corner = {0.0, -width/2.0, -height/2.0};
+            start_corner = {center[0], center[0]-width/2.0, center[0]-height/2.0};
         }else if(fix_coord == 'y'){
-            start_corner = {-width/2.0, 0.0, -height/2.0};
+            start_corner = {center[0]-width/2.0, center[1], center[0]-height/2.0};
         }else if(fix_coord == 'z'){
-            start_corner = {-width/2.0, -height/2.0, 0.0};
+            start_corner = {center[0]-width/2.0, center[0]-height/2.0, center[2]};
         }else{
             std::cout << "WARNING: wrong fixed coordinate in parameters to generate plane" << std::endl;
         }
 
-        double step_1 = width/(double)h;
-        double step_2 = height/(double)w;
+        double step_1 = width/(double)w;
+        double step_2 = height/(double)h;
 
         glm::vec3 current_corner;
 

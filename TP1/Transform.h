@@ -24,7 +24,7 @@ public:
             }else if(obj.index_transf[i]==1){
                 camera->translateModelMat(obj.transformations[i]);
             }else if(obj.index_transf[i]==2){
-                camera->rotateModelMat(obj.transformations[i] , 0.27);
+                camera->rotateModelMat(obj.transformations[i] , 0.07);
             }
         }
 

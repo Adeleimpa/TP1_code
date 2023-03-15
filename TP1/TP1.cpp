@@ -67,8 +67,8 @@ float angle = 0.;
 float zoom = 1.;
 
 // plane data
-float plane_len = 3.0;
-int plane_dim = 50;
+float plane_len =  5.0;
+int plane_dim = 10;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // height map and textures
@@ -150,16 +150,17 @@ int main( void )
     programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
 
     // ------------------------------------------------------------------------------------
-    // SOLAR SYSTEM
+    // SOLAR SYSTEM (TP3)
     // ------------------------------------------------------------------------------------
     SceneGraph *root = new SceneGraph();
     SolarSystem *solarSystem = new SolarSystem();
     solarSystem->createSolarSystem(root);
+    cameraRotates = true;
     // -----------------------------------------------------------------------------------
 
 
     // ------------------------------------------------------------------------------------
-    // GENERATE TERRAIN
+    // GENERATE TERRAIN (TP1 & 2)
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
     /*plane->setIsTerrain(1);
@@ -167,8 +168,10 @@ int main( void )
     scene_objects.push_back(plane);
 
     // use height map
+    glm::vec3 initial_center = glm::vec3(0.0,0.0,0.0);
+    plane->generatePlane('y', initial_center);
+    //plane->addRelief('y');
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
-    plane->generatePlane('y');
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
     // add textures
@@ -207,7 +210,6 @@ int main( void )
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -320,13 +322,12 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         /// accelerates camera
         speedUp = true;
 
-    }else if ( key == GLFW_KEY_Z and action == GLFW_PRESS ){ // W on macbook keyboard
+    }else if ( key == GLFW_KEY_Z and action == GLFW_PRESS ) { // W on macbook keyboard
 
         std::cout << "You have pressed the key W : rotation slows down" << std::endl;
 
         /// slows down camera
         slowDown = true;
-
     }
 
     if( (key == GLFW_KEY_SLASH or key == GLFW_KEY_EQUAL) and action == GLFW_PRESS){
@@ -334,7 +335,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         // EDIT PLANE
         plane->setDimension(plane_dim, plane_dim);
         plane->clearVectors();
-        plane->generatePlane('y');
+        plane->generatePlane('y',  glm::vec3(0.0,0.0,0.0));
         plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
         // UPDATE BUFFERS
