@@ -34,6 +34,7 @@ using namespace glm;
 #include "MeshObject.h"
 #include "SceneGraph.h"
 #include "Transform.h"
+#include "SolarSystem.h"
 
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -151,32 +152,10 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // SOLAR SYSTEM
     // ------------------------------------------------------------------------------------
-    // Load mesh file
-    MeshObject *sun = new MeshObject();
-    std::string filename_sphere("data_off/sphere.off");
-    //std::string filename_suz("data_off/s.off");
-    sun->create(filename_sphere);
-    sun->setColor(glm::vec4(1.0,0.5,0.0,0.0));
-    sun->generateBuffers();
-    //scene_objects.push_back(suzanne_mesh);
-
-    // create scene graph
-    SceneGraph *root = new SceneGraph(*sun);
-    root->setLevel(0);
-
-    MeshObject *earth = new MeshObject();
-    earth->create(filename_sphere);
-    earth->setColor(glm::vec4(0.0,0.0,1.0,0.0));
-    earth->generateBuffers();
-    SceneGraph *node_earth = root->addChild(new SceneGraph(*earth));
-
-    MeshObject *moon = new MeshObject();
-    moon->create(filename_sphere);
-    moon->setColor(glm::vec4(0.5,0.5,0.5,0.0));
-    moon->generateBuffers();
-    scene_objects.push_back(moon);
-    SceneGraph *node_moon = node_earth->addChild(new SceneGraph(*moon));
-    // ------------------------------------------------------------------------------------
+    SceneGraph *root = new SceneGraph();
+    SolarSystem *solarSystem = new SolarSystem();
+    solarSystem->createSolarSystem(root);
+    // -----------------------------------------------------------------------------------
 
 
     // ------------------------------------------------------------------------------------
@@ -255,7 +234,7 @@ int main( void )
         }*/
 
         // solar system
-        transformer.drawSolarSystem(*root, programID, camera);
+        transformer.updateGraph(*root, programID, camera);
 
         // Swap buffers
         glfwSwapBuffers(window);

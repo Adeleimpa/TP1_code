@@ -27,6 +27,10 @@ public:
 
     glm::vec4 color = glm::vec4(0.0,0.0,0.0,0.0); // default value
 
+    // transformations
+    std::vector<glm::vec3> transformations;
+    std::vector<int> index_transf; // 0 for scaling, 1 for translation, 2 for rotation
+
     SceneObject() {}
 
     void setIsTerrain(int isTerrain){
@@ -61,7 +65,7 @@ public:
         // Index buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
-        //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
+        glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); // Uncomment to see mesh
 
         glEnableClientState(GL_VERTEX_ARRAY) ;
         glEnableClientState (GL_NORMAL_ARRAY);

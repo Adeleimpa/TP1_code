@@ -20,7 +20,13 @@ private:
 
 public:
 
+    SceneGraph() {}
+
     SceneGraph(SceneObject const &data) {
+        this->data = data;
+    }
+
+    void setData(SceneObject data){
         this->data = data;
     }
 

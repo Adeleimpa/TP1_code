@@ -36,21 +36,20 @@ public:
             }else if(slowDown){
                 increment /= 1.3;
             }
-            std::cout << increment << std::endl;
             Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=increment), glm::vec3(0.0,1.0,0.0));
         }
     }
 
-    void scaleModelMat(float coef){
-        Model_Matrix = glm::scale(Model_Matrix, vec3(coef, coef, coef));
+    void scaleModelMat(glm::vec3 scaling_factor){
+        Model_Matrix = glm::scale(Model_Matrix, scaling_factor);
     }
 
     void rotateModelMat(glm::vec3 axis, float increment){
         Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=increment), axis);
     }
 
-    void translateModelMat(float x, float y, float z){
-        Model_Matrix = glm::translate(Model_Matrix, glm::vec3(x, y, z));
+    void translateModelMat(glm::vec3 translation_vector){
+        Model_Matrix = glm::translate(Model_Matrix, translation_vector);
     }
 
     void sendMVPtoShader(GLuint programID){
