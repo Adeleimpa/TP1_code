@@ -23,7 +23,7 @@ public:
 
     GLuint vertexbuffer, elementbuffer;
 
-    int isTerrain = 0;
+    int isTerrain = 0; // 0 is not a terrain, 1 is a terrain
 
     glm::vec4 color = glm::vec4(0.0,0.0,0.0,0.0); // default value
 

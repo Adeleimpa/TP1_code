@@ -13,12 +13,10 @@ public:
 
     // general method to update scene graph
     void updateGraph(SceneGraph root, GLuint programID, Camera *camera){
-
         SceneObject obj = root.getData();
 
         // transform Model matrix
         for(int i = 0; i < obj.transformations.size(); i++){
-
             if(obj.index_transf[i]==0){
                 camera->scaleModelMat(obj.transformations[i]);
             }else if(obj.index_transf[i]==1){
@@ -35,14 +33,12 @@ public:
         obj.draw(programID);
 
         for(SceneGraph *child : root.getChildren()){
-
             SceneObject child_obj = child->getData();
-
             updateGraph(*child, programID, camera);
         }
-
     }
 
+    /* UNUSED
     // general method to draw scene graph
     void drawGraph(SceneGraph root, GLuint programID){
 
@@ -57,8 +53,7 @@ public:
             child_obj.loadBuffers();
             child_obj.draw(programID);
         }
-
-    }
+    }*/
 
 };
 
