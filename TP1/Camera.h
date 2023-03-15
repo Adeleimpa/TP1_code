@@ -45,8 +45,8 @@ public:
         Model_Matrix = glm::scale(Model_Matrix, vec3(coef, coef, coef));
     }
 
-    void rotateModelMat(glm::vec3 axis){
-        Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=0.27), axis);
+    void rotateModelMat(glm::vec3 axis, float increment){
+        Model_Matrix = glm::rotate(Model_Matrix,glm::radians(angle_in_degrees+=increment), axis);
     }
 
     void translateModelMat(float x, float y, float z){

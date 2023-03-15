@@ -255,7 +255,7 @@ int main( void )
         }*/
 
         // solar system
-        transformer.transformAndDraw(*root, programID, camera);
+        transformer.drawSolarSystem(*root, programID, camera);
 
         // Swap buffers
         glfwSwapBuffers(window);

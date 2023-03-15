@@ -11,7 +11,7 @@ class Transform {
 
 public:
 
-    void transformAndDraw(SceneGraph root, GLuint programID, Camera *camera){
+    void drawSolarSystem(SceneGraph root, GLuint programID, Camera *camera){
 
         // Sun
         SceneObject obj_root = root.getData();
@@ -32,12 +32,12 @@ public:
 
             // earth turns around sun
             camera->translateModelMat(-5, 0, 0);
-            camera->rotateModelMat(glm::vec3(0.0,1.0,0.0));
+            camera->rotateModelMat(glm::vec3(0.0,1.0,0.0), 0.27);
             camera->translateModelMat(5, 0, 0);
-            camera->rotateModelMat(glm::vec3(0.0,-1.0,0.0));
+            camera->rotateModelMat(glm::vec3(0.0,-1.0,0.0), 0.27);
 
             // earth turns around itself
-            camera->rotateModelMat(glm::vec3(sin(23.f*PI/180),cos(23.f*PI/180),0));
+            camera->rotateModelMat(glm::vec3(sin(23.f*PI/180),cos(23.f*PI/180),0), 0.27);
 
             // update MVP matrix
             camera->sendMVPtoShader(programID);
@@ -56,7 +56,7 @@ public:
 
                 // moon turns around earth
                 camera->translateModelMat(-5, 0, 0); // move it to center of earth
-                camera->rotateModelMat(glm::vec3(sin(23.f*PI/180),cos(23.f*PI/180),0)); // same rotation axis as earth
+                camera->rotateModelMat(glm::vec3(sin(23.f*PI/180),cos(23.f*PI/180),0), 0.27); // same rotation axis as earth
                 camera->translateModelMat(5, 0, 0); // move it back to its place
 
                 // update MVP matrix
@@ -66,6 +66,38 @@ public:
                 moon.draw(programID);
             }
         }
+    }
+
+    // TODO TEST
+    // general method to update scene graph
+    void updateGraph(SceneGraph root, GLuint programID, Camera *camera){
+
+        // transform Model matrix here
+
+        for(SceneGraph *child : root.getChildren()){
+            updateGraph(*child, programID, camera);
+        }
+
+        // update MVP matrix
+        camera->sendMVPtoShader(programID);
+    }
+
+    // TODO TEST
+    // general method to draw scene graph
+    void drawGraph(SceneGraph root, GLuint programID){
+
+        SceneObject obj_root = root.getData();
+
+        obj_root.loadBuffers();
+        obj_root.draw(programID);
+
+        for(SceneGraph *child : root.getChildren()){
+            SceneObject child_obj = child->getData();
+
+            child_obj.loadBuffers();
+            child_obj.draw(programID);
+        }
+
     }
 
 };
