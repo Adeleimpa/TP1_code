@@ -62,5 +62,7 @@ void main(){
                         }
                         gl_FragColor = coef_rock*texture(texture_rock, coord_txt) + coef_snowrocks*texture(texture_snowrocks, coord_txt);
                 }
+
+                //gl_FragColor = mesh_color;
         }
 }

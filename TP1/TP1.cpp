@@ -72,6 +72,11 @@ float plane_len =  3.0;
 int plane_dim = 20;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
+// sphere data
+Sphere *sphere = new Sphere();
+
+SceneGraph *root = new SceneGraph();
+
 // height map and textures
 Texture *height_map = new Texture();
 GLTexture *grass_texture = new GLTexture();
@@ -163,12 +168,15 @@ int main( void )
     // -----------------------------------------------------------------------------------
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
-    Sphere *sphere = new Sphere();
     sphere->m_center = glm::vec3(0.0, 1.0, 0.0);
     sphere->m_radius = 0.3f;
     sphere->build_arrays();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
+
+    sphere->transformations.push_back(glm::vec3(0.0,0.0,0.0));
+    sphere->index_transf.push_back(1);
+
     scene_objects.push_back(sphere);
     // -----------------------------------------------------------------------------------
 
@@ -186,7 +194,17 @@ int main( void )
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
+    plane->setColor(glm::vec4(0.2, 0.8, 0.05, 0.0));
     scene_objects.push_back(plane);
+    // ------------------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------------------
+    // SCENE GRAPH
+    // ------------------------------------------------------------------------------------
+    //SceneGraph *root = new SceneGraph();
+    root->setData(plane);
+    root->setLevel(0);
+    SceneGraph *node_child = root->addChild(new SceneGraph(sphere));
     // ------------------------------------------------------------------------------------
 
 
@@ -240,7 +258,7 @@ int main( void )
         camera->sendMVPtoShader(programID);
 
         // Draw the triangles !
-        for(int i = 0; i < scene_objects.size(); i++){
+        /*for(int i = 0; i < scene_objects.size(); i++){
 
             if(scene_objects[i]->isTerrain==1){ // terrain
                 // send textures to shader
@@ -253,10 +271,10 @@ int main( void )
 
             scene_objects[i]->loadBuffers();
             scene_objects[i]->draw(programID);
-        }
+        }*/
 
         // solar system
-        //transformer.updateGraph(*root, programID, camera);
+        transformer.updateGraph(*root, programID, camera, grass_texture, rock_texture, snowrocks_texture, sun_texture); // TODO add texture when you do that
 
         // Swap buffers
         glfwSwapBuffers(window);
@@ -343,6 +361,25 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
         /// slows down camera
         slowDown = true;
+
+    }
+    // DISPLACE SPHERE USING T,F,V,G
+    else if ( key == GLFW_KEY_T and action == GLFW_PRESS ){
+        std::cout << "You have pressed the key T : sphere translation up" << std::endl;
+        root->getChildren()[0]->getData()->transformations[0][1] += 0.1;
+
+    }else if ( key == GLFW_KEY_V and action == GLFW_PRESS ){
+        std::cout << "You have pressed the key V : sphere translation down" << std::endl;
+        root->getChildren()[0]->getData()->transformations[0][1] -= 0.1;
+
+    }else if ( key == GLFW_KEY_F and action == GLFW_PRESS ){
+        std::cout << "You have pressed the key F : sphere translation left" << std::endl;
+        root->getChildren()[0]->getData()->transformations[0][0] -= 0.1;
+
+    }else if ( key == GLFW_KEY_G and action == GLFW_PRESS ){
+        std::cout << "You have pressed the key G : sphere translation right" << std::endl;
+        root->getChildren()[0]->getData()->transformations[0][0] += 0.1;
+
     }
 
     if( (key == GLFW_KEY_SLASH or key == GLFW_KEY_EQUAL) and action == GLFW_PRESS){

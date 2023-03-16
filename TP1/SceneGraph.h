@@ -12,17 +12,17 @@
 
 class SceneGraph {
 private:
-    SceneObject data;
+    SceneObject* data;
     std::vector<SceneGraph*> children;
     SceneGraph* parent;
     int level;
 public:
     SceneGraph() {}
-    SceneGraph(SceneObject const &data) {
+    SceneGraph(SceneObject *data) {
         this->data = data;
     }
 
-    void setData(SceneObject data){
+    void setData(SceneObject *data){
         this->data = data;
     }
 
@@ -51,7 +51,7 @@ public:
         return this->children;
     }
 
-    SceneObject getData() {
+    SceneObject* getData() {
         return this->data;
     }
 

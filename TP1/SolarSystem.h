@@ -36,7 +36,7 @@ public:
 
         // create scene graph
         //root = new SceneGraph(*sun);
-        root->setData(*sun);
+        root->setData(sun);
         root->setLevel(0);
 
         // create earth
@@ -66,7 +66,7 @@ public:
         earth->transformations.push_back(glm::vec3(sin(23.f*PI/180),cos(23.f*PI/180),0));
         earth->index_transf.push_back(2);
 
-        SceneGraph *node_earth = root->addChild(new SceneGraph(*earth));
+        SceneGraph *node_earth = root->addChild(new SceneGraph(earth));
 
         // create moon
         MeshObject *moon = new MeshObject();
@@ -88,7 +88,7 @@ public:
         moon->transformations.push_back(glm::vec3(5, 0, 0)); // move it back to its place
         moon->index_transf.push_back(1);
 
-        SceneGraph *node_moon = node_earth->addChild(new SceneGraph(*moon));
+        SceneGraph *node_moon = node_earth->addChild(new SceneGraph(moon));
     }
 
 };
