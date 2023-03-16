@@ -331,7 +331,8 @@ CMakeFiles/TP1.dir/TP1/TP1.cpp.o: ../TP1/TP1.cpp \
   ../TP1/MeshObject.h \
   ../TP1/SceneGraph.h \
   ../TP1/Transform.h \
-  ../TP1/SolarSystem.h
+  ../TP1/SolarSystem.h \
+  ../TP1/Sphere.h
 
 CMakeFiles/TP1.dir/common/controls.cpp.o: ../common/controls.cpp \
   /usr/include/stdc-predef.h \
@@ -1431,6 +1432,8 @@ CMakeFiles/TP1.dir/common/vboindexer.cpp.o: ../common/vboindexer.cpp \
 /usr/include/KHR/khrplatform.h:
 
 /usr/include/GL/glext.h:
+
+../TP1/Sphere.h:
 
 ../TP1/SolarSystem.h:
 

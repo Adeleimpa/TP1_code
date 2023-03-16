@@ -35,6 +35,7 @@ using namespace glm;
 #include "SceneGraph.h"
 #include "Transform.h"
 #include "SolarSystem.h"
+#include "Sphere.h"
 
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods );
@@ -152,12 +153,20 @@ int main( void )
     // ------------------------------------------------------------------------------------
     // SOLAR SYSTEM (TP3)
     // ------------------------------------------------------------------------------------
-    SceneGraph *root = new SceneGraph();
+    /*SceneGraph *root = new SceneGraph();
     SolarSystem *solarSystem = new SolarSystem();
     solarSystem->createSolarSystem(root);
-    cameraRotates = true;
+    cameraRotates = true;*/
     // -----------------------------------------------------------------------------------
 
+    //
+    Sphere *sphere = new Sphere();
+    sphere->m_center = glm::vec3(0.0, 0.0, 0.0);
+    sphere->m_radius = 0.75f;
+    sphere->build_arrays();
+    sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
+    sphere->generateBuffers();
+    scene_objects.push_back(sphere);
 
     // ------------------------------------------------------------------------------------
     // GENERATE TERRAIN (TP1 & 2)
@@ -229,14 +238,13 @@ int main( void )
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
 
         // Draw the triangles !
-        // terrain and objects
-        /*for(SceneObject *obj: scene_objects){
+        for(SceneObject *obj: scene_objects){
             obj->loadBuffers();
             obj->draw(programID);
-        }*/
+        }
 
         // solar system
-        transformer.updateGraph(*root, programID, camera);
+        //transformer.updateGraph(*root, programID, camera);
 
         // Swap buffers
         glfwSwapBuffers(window);
