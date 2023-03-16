@@ -27,7 +27,7 @@ void main(){
 
         if(isTerrain == 0){ // is not a terrain
                 gl_FragColor = mesh_color;
-                //gl_FragColor = texture(texture_grass, coord_txt);
+                //gl_FragColor = texture(texture_snowrocks, coord_txt);
 
         }else if(isTerrain == 1){
 

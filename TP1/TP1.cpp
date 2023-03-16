@@ -168,7 +168,7 @@ int main( void )
     sphere->build_arrays();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
-    //scene_objects.push_back(sphere);
+    scene_objects.push_back(sphere);
     // -----------------------------------------------------------------------------------
 
     // ------------------------------------------------------------------------------------
@@ -230,15 +230,18 @@ int main( void )
         slowDown = false;
         camera->sendMVPtoShader(programID);
 
-        // send textures to shader
-        grass_texture->sendTextureToShader(programID, "texture_grass", 0);
-        rock_texture->sendTextureToShader(programID, "texture_rock", 1);
-        snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
-
         // Draw the triangles !
-        for(SceneObject *obj: scene_objects){
-            obj->loadBuffers();
-            obj->draw(programID);
+        for(int i = 0; i < scene_objects.size(); i++){
+
+            if(i==1){
+                // send textures to shader
+                grass_texture->sendTextureToShader(programID, "texture_grass", 0);
+                rock_texture->sendTextureToShader(programID, "texture_rock", 1);
+                snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
+            }
+
+            scene_objects[i]->loadBuffers();
+            scene_objects[i]->draw(programID);
         }
 
         // solar system
