@@ -74,9 +74,10 @@ Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // height map and textures
 Texture *height_map = new Texture();
-GLTexture * grass_texture = new GLTexture();
-GLTexture * rock_texture = new GLTexture();
-GLTexture * snowrocks_texture = new GLTexture();
+GLTexture *grass_texture = new GLTexture();
+GLTexture *rock_texture = new GLTexture();
+GLTexture *snowrocks_texture = new GLTexture();
+GLTexture *sun_texture = new GLTexture();
 
 GLuint programID;
 /*******************************************************************************/
@@ -186,8 +187,16 @@ int main( void )
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
     scene_objects.push_back(plane);
+    // ------------------------------------------------------------------------------------
 
+
+    // ------------------------------------------------------------------------------------
     // add textures
+    // ------------------------------------------------------------------------------------
+    sun_texture->generateTexture();
+    sun_texture->loadTexture((char*)"textures/sun.jpg");
+    sun_texture->defineParameters();
+
     grass_texture->generateTexture();
     grass_texture->loadTexture((char*)"textures/grass.png");
     grass_texture->defineParameters();
@@ -233,11 +242,13 @@ int main( void )
         // Draw the triangles !
         for(int i = 0; i < scene_objects.size(); i++){
 
-            if(i==1){
+            if(scene_objects[i]->isTerrain==1){ // terrain
                 // send textures to shader
                 grass_texture->sendTextureToShader(programID, "texture_grass", 0);
                 rock_texture->sendTextureToShader(programID, "texture_rock", 1);
                 snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
+            }else{
+                sun_texture->sendTextureToShader(programID, "texture_sun", 3);
             }
 
             scene_objects[i]->loadBuffers();
