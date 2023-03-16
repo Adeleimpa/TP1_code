@@ -25,8 +25,9 @@ void main(){
 
         //color = vec3(0.0, 0.0, 1.0);
 
-        if(isTerrain == 0){
+        if(isTerrain == 0){ // is not a terrain
                 gl_FragColor = mesh_color;
+                //gl_FragColor = texture(texture_grass, coord_txt);
 
         }else if(isTerrain == 1){
 

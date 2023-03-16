@@ -55,6 +55,8 @@ public:
 
     void generatePlane(char fix_coord, glm::vec3 center){
 
+        // TODO not sure center works
+
         glm::vec3 start_corner;
 
         if(fix_coord == 'x'){

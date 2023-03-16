@@ -68,8 +68,8 @@ float angle = 0.;
 float zoom = 1.;
 
 // plane data
-float plane_len =  5.0;
-int plane_dim = 10;
+float plane_len =  4.0;
+int plane_dim = 20;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // height map and textures
@@ -159,20 +159,23 @@ int main( void )
     cameraRotates = true;*/
     // -----------------------------------------------------------------------------------
 
-    //
+    // -----------------------------------------------------------------------------------
+    // SPHERE OBJECT (TP4)
+    // -----------------------------------------------------------------------------------
     Sphere *sphere = new Sphere();
-    sphere->m_center = glm::vec3(0.0, 0.0, 0.0);
-    sphere->m_radius = 0.75f;
+    sphere->m_center = glm::vec3(0.0, 1.0, 0.0);
+    sphere->m_radius = 0.3f;
     sphere->build_arrays();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
     scene_objects.push_back(sphere);
+    // -----------------------------------------------------------------------------------
 
     // ------------------------------------------------------------------------------------
     // GENERATE TERRAIN (TP1 & 2)
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    /*plane->setIsTerrain(1);
+    plane->setIsTerrain(1);
     plane->generateBuffers();
     scene_objects.push_back(plane);
 
@@ -200,7 +203,7 @@ int main( void )
     snowrocks_texture->fillBuffer(plane->coord_texture);
     snowrocks_texture->generateTexture();
     snowrocks_texture->loadTexture((char*)"textures/snowrocks.png");
-    snowrocks_texture->defineParameters();*/
+    snowrocks_texture->defineParameters();
     // ------------------------------------------------------------------------------------
 
     // Get a handle for our "LightPosition" uniform
