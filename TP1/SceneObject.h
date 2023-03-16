@@ -45,9 +45,7 @@ public:
     void draw(GLuint programID) const {
         if( triangles.size() == 0 ) return;
 
-        //std::cout << isTerrain << std::endl;
         glUniform1i(glGetUniformLocation(programID, "isTerrain"), isTerrain);
-
         glUniform4f(glGetUniformLocation(programID, "mesh_color"), color[0], color[1], color[2], color[3]);
 
         // 1rst attribute buffer : vertices
@@ -88,14 +86,14 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
 
-        // Generate a buffer for the indices as well
+        // Generate a buffer for the indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
 
+        // fill buffer for texture coordinates
         glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
         glBufferData(GL_ARRAY_BUFFER, coord_texture.size() * sizeof(glm::vec2), &coord_texture[0], GL_STATIC_DRAW);
-        //glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
-        //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
     }
 
     void deleteBuffers(){
