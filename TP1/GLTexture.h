@@ -12,17 +12,9 @@ class GLTexture : public Texture {
 
 private:
     unsigned int texture;
-    GLuint buffer_coord_txt;
+    //GLuint buffer_coord_txt;
 
 public:
-    void generateBuffer(){
-        glGenBuffers(1, &buffer_coord_txt);
-    }
-
-    void fillBuffer(std::vector<glm::vec2> & coord_texture){
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
-        glBufferData(GL_ARRAY_BUFFER, coord_texture.size() * sizeof(glm::vec2), &coord_texture[0], GL_STATIC_DRAW);
-    }
 
     void generateTexture(){
         glGenTextures(1, &texture);
@@ -51,8 +43,8 @@ public:
     }
 
     void sendTextureToShader(GLuint programID, const GLchar *texture_shader_name, int indexActiveTexture){
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
+        //glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
+        //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
         glActiveTexture(GL_TEXTURE0 + indexActiveTexture);
         glBindTexture(GL_TEXTURE_2D , texture);
         GLuint location = glGetUniformLocation(programID, texture_shader_name);

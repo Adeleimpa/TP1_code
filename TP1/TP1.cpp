@@ -168,39 +168,34 @@ int main( void )
     sphere->build_arrays();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
-    scene_objects.push_back(sphere);
+    //scene_objects.push_back(sphere);
     // -----------------------------------------------------------------------------------
 
     // ------------------------------------------------------------------------------------
     // GENERATE TERRAIN (TP1 & 2)
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    plane->setIsTerrain(1);
-    plane->generateBuffers();
-    scene_objects.push_back(plane);
-
-    // use height map
     glm::vec3 initial_center = glm::vec3(0.0,0.0,0.0);
     plane->generatePlane('y', initial_center);
+    plane->setIsTerrain(1);
+    plane->generateBuffers();
     //plane->addRelief('y');
+
+    // use height map
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
+    scene_objects.push_back(plane);
+
     // add textures
-    grass_texture->generateBuffer();
-    grass_texture->fillBuffer(plane->coord_texture);
     grass_texture->generateTexture();
     grass_texture->loadTexture((char*)"textures/grass.png");
     grass_texture->defineParameters();
 
-    rock_texture->generateBuffer();
-    rock_texture->fillBuffer(plane->coord_texture);
     rock_texture->generateTexture();
     rock_texture->loadTexture((char*)"textures/rock.png");
     rock_texture->defineParameters();
 
-    snowrocks_texture->generateBuffer();
-    snowrocks_texture->fillBuffer(plane->coord_texture);
     snowrocks_texture->generateTexture();
     snowrocks_texture->loadTexture((char*)"textures/snowrocks.png");
     snowrocks_texture->defineParameters();
@@ -235,7 +230,7 @@ int main( void )
         slowDown = false;
         camera->sendMVPtoShader(programID);
 
-        // texture
+        // send textures to shader
         grass_texture->sendTextureToShader(programID, "texture_grass", 0);
         rock_texture->sendTextureToShader(programID, "texture_rock", 1);
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
@@ -352,11 +347,11 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         // UPDATE BUFFERS
         plane->loadBuffers();
 
-        grass_texture->fillBuffer(plane->coord_texture);
+        //grass_texture->fillBuffer(plane->coord_texture);
         grass_texture->sendTextureToShader(programID, "texture_grass", 0);
-        rock_texture->fillBuffer(plane->coord_texture);
+        //rock_texture->fillBuffer(plane->coord_texture);
         rock_texture->sendTextureToShader(programID, "texture_rock", 0);
-        snowrocks_texture->fillBuffer(plane->coord_texture);
+        //->fillBuffer(plane->coord_texture);
         snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 0);
     }
 

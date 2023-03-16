@@ -21,7 +21,7 @@ public:
     std::vector<glm::vec2> coord_texture; // texture
     std::vector<glm::vec3> normals;
 
-    GLuint vertexbuffer, elementbuffer;
+    GLuint vertexbuffer, elementbuffer, buffer_coord_txt;
 
     int isTerrain = 0; // 0 is not a terrain, 1 is a terrain
 
@@ -80,6 +80,7 @@ public:
     void generateBuffers(){
         glGenBuffers(1, &vertexbuffer);
         glGenBuffers(1, &elementbuffer);
+        glGenBuffers(1, &buffer_coord_txt);
     }
 
     void loadBuffers(){
@@ -90,11 +91,17 @@ public:
         // Generate a buffer for the indices as well
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
+        glBufferData(GL_ARRAY_BUFFER, coord_texture.size() * sizeof(glm::vec2), &coord_texture[0], GL_STATIC_DRAW);
+        //glBindBuffer(GL_ARRAY_BUFFER, buffer_coord_txt);
+        //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*2, (void *) 0);
     }
 
     void deleteBuffers(){
         glDeleteBuffers(1, &vertexbuffer);
         glDeleteBuffers(1, &elementbuffer);
+        glDeleteBuffers(1, &buffer_coord_txt);
     }
 
     void clearVectors(){
