@@ -60,11 +60,11 @@ public:
         glm::vec3 start_corner;
 
         if(fix_coord == 'x'){
-            start_corner = {center[0], center[0]-width/2.0, center[0]-height/2.0};
+            start_corner = {center[0], center[1]-width/2.0, center[2]-height/2.0};
         }else if(fix_coord == 'y'){
-            start_corner = {center[0]-width/2.0, center[1], center[0]-height/2.0};
+            start_corner = {center[0]-width/2.0, center[1], center[2]-height/2.0};
         }else if(fix_coord == 'z'){
-            start_corner = {center[0]-width/2.0, center[0]-height/2.0, center[2]};
+            start_corner = {center[0]-width/2.0, center[1]-height/2.0, center[2]};
         }else{
             std::cout << "WARNING: wrong fixed coordinate in parameters to generate plane" << std::endl;
         }
@@ -186,6 +186,7 @@ public:
             }
         }
     }
+
 
 };
 

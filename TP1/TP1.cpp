@@ -68,7 +68,7 @@ float angle = 0.;
 float zoom = 1.;
 
 // plane data
-float plane_len =  3.0;
+float plane_len =  3.8;
 int plane_dim = 20;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
@@ -169,7 +169,7 @@ int main( void )
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
     sphere->m_center = glm::vec3(0.0, 1.0, 0.0);
-    sphere->m_radius = 0.3f;
+    sphere->m_radius = 0.15f;
     sphere->build_arrays();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
@@ -363,20 +363,23 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         slowDown = true;
 
     }
+
+    // TODO choose speed
     // DISPLACE SPHERE USING T,F,V,G
-    else if ( key == GLFW_KEY_T and action == GLFW_PRESS ){
+    else if ( key == GLFW_KEY_T ){
         std::cout << "You have pressed the key T : sphere translation up" << std::endl;
         root->getChildren()[0]->getData()->transformations[0][1] += 0.1;
+        
 
-    }else if ( key == GLFW_KEY_V and action == GLFW_PRESS ){
+    }else if ( key == GLFW_KEY_V ){
         std::cout << "You have pressed the key V : sphere translation down" << std::endl;
         root->getChildren()[0]->getData()->transformations[0][1] -= 0.1;
 
-    }else if ( key == GLFW_KEY_F and action == GLFW_PRESS ){
+    }else if ( key == GLFW_KEY_F ){
         std::cout << "You have pressed the key F : sphere translation left" << std::endl;
         root->getChildren()[0]->getData()->transformations[0][0] -= 0.1;
 
-    }else if ( key == GLFW_KEY_G and action == GLFW_PRESS ){
+    }else if ( key == GLFW_KEY_G ){
         std::cout << "You have pressed the key G : sphere translation right" << std::endl;
         root->getChildren()[0]->getData()->transformations[0][0] += 0.1;
 
