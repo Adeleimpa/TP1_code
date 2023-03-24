@@ -367,13 +367,12 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
     // TODO choose speed
     // DISPLACE SPHERE USING T,F,V,G
     else if ( key == GLFW_KEY_T ){
-        std::cout << "You have pressed the key T : sphere translation up" << std::endl;
-        root->getChildren()[0]->getData()->transformations[0][1] += 0.1;
-        
+        std::cout << "You have pressed the key T : sphere translation back" << std::endl;
+        root->getChildren()[0]->getData()->transformations[0][2] -= 0.1;
 
     }else if ( key == GLFW_KEY_V ){
-        std::cout << "You have pressed the key V : sphere translation down" << std::endl;
-        root->getChildren()[0]->getData()->transformations[0][1] -= 0.1;
+        std::cout << "You have pressed the key V : sphere translation front" << std::endl;
+        root->getChildren()[0]->getData()->transformations[0][2] += 0.1;
 
     }else if ( key == GLFW_KEY_F ){
         std::cout << "You have pressed the key F : sphere translation left" << std::endl;
