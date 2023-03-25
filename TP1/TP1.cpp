@@ -69,7 +69,7 @@ float zoom = 1.;
 
 // plane data
 float plane_len =  3.8;
-int plane_dim = 20;
+int plane_dim = 10;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // sphere data
@@ -165,21 +165,6 @@ int main( void )
     cameraRotates = true;*/
     // -----------------------------------------------------------------------------------
 
-    // -----------------------------------------------------------------------------------
-    // SPHERE OBJECT (TP4)
-    // -----------------------------------------------------------------------------------
-    sphere->m_center = glm::vec3(0.0, 1.0, 0.0);
-    sphere->m_radius = 0.15f;
-    sphere->build_arrays();
-    sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
-    sphere->generateBuffers();
-
-    sphere->transformations.push_back(glm::vec3(0.0,0.0,0.0));
-    sphere->index_transf.push_back(1);
-
-    scene_objects.push_back(sphere);
-    // -----------------------------------------------------------------------------------
-
     // ------------------------------------------------------------------------------------
     // GENERATE TERRAIN (TP1 & 2)
     // ------------------------------------------------------------------------------------
@@ -197,6 +182,22 @@ int main( void )
     plane->setColor(glm::vec4(0.2, 0.8, 0.05, 0.0));
     scene_objects.push_back(plane);
     // ------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------
+    // SPHERE OBJECT (TP4)
+    // -----------------------------------------------------------------------------------
+    sphere->m_radius = 0.15f;
+    glm::vec3 middlePlaneVertex = plane->getMiddleVertex();
+    sphere->m_center = glm::vec3(middlePlaneVertex[0], middlePlaneVertex[1] + sphere->m_radius, middlePlaneVertex[2]);
+    sphere->build_arrays();
+    sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
+    sphere->generateBuffers();
+
+    sphere->transformations.push_back(glm::vec3(0.0,0.0,0.0));
+    sphere->index_transf.push_back(1);
+
+    scene_objects.push_back(sphere);
+    // -----------------------------------------------------------------------------------
 
     // ------------------------------------------------------------------------------------
     // SCENE GRAPH
@@ -260,7 +261,7 @@ int main( void )
         // Draw the triangles !
         /*for(int i = 0; i < scene_objects.size(); i++){
 
-            if(scene_objects[i]->isTerrain==1){ // terrain
+            if(scene_objects[i]->isTerrain==0){ // terrain
                 // send textures to shader
                 grass_texture->sendTextureToShader(programID, "texture_grass", 0);
                 rock_texture->sendTextureToShader(programID, "texture_rock", 1);
@@ -274,7 +275,7 @@ int main( void )
         }*/
 
         // solar system
-        transformer.updateGraph(*root, programID, camera, grass_texture, rock_texture, snowrocks_texture, sun_texture); // TODO add texture when you do that
+        transformer.updateGraph(*root, programID, camera, grass_texture, rock_texture, snowrocks_texture, sun_texture);
 
         // Swap buffers
         glfwSwapBuffers(window);

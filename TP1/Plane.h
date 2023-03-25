@@ -140,7 +140,6 @@ public:
 
 
     void addHeightMap(unsigned char *HM_data, int height_HM, int width_HM,
-                      //std::vector<glm::vec3> &indexed_vertices,
                       char fix_coord){
         double max = 1.0; // maximum height
         double min = 0.0; // minimum height
@@ -185,6 +184,15 @@ public:
                 //std::cout << "new coord (z):" << indexed_vertices[i][2] << std::endl;
             }
         }
+    }
+
+    glm::vec3 getMiddleVertex(){
+        // TODO make it work for any resolution and any dimension
+
+        int middle_h = (h+1)/2;
+        int middle_w = (w+1)/2;
+
+        return indexed_vertices[middle_h*(h+1) + middle_w];
     }
 
 
