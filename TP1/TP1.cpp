@@ -69,11 +69,13 @@ float zoom = 1.;
 
 // plane data
 float plane_len =  3.8;
-int plane_dim = 10;
-Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
+int plane_dim = 30;
+Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim, glm::vec3(0.0,0.0,0.0));
 
 // sphere data
 Sphere *sphere = new Sphere();
+glm::vec3 center_sphere;
+double increment_height = 0.03;
 
 SceneGraph *root = new SceneGraph();
 
@@ -169,8 +171,7 @@ int main( void )
     // GENERATE TERRAIN (TP1 & 2)
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    glm::vec3 initial_center = glm::vec3(0.0,0.0,0.0);
-    plane->generatePlane('y', initial_center);
+    plane->generatePlane('y');
     plane->setIsTerrain(1);
     plane->generateBuffers();
     //plane->addRelief('y');
@@ -186,9 +187,11 @@ int main( void )
     // -----------------------------------------------------------------------------------
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
-    sphere->m_radius = 0.15f;
-    glm::vec3 middlePlaneVertex = plane->getMiddleVertex();
-    sphere->m_center = glm::vec3(middlePlaneVertex[0], middlePlaneVertex[1] + sphere->m_radius, middlePlaneVertex[2]);
+    sphere->m_radius = 0.11f;
+    center_sphere = glm::vec3(plane->center[0], 0.0, plane->center[2]);
+    double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+    center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
+    sphere->m_center = center_sphere;
     sphere->build_arrays();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
@@ -342,7 +345,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
         if(cameraRotates){
             cameraRotates = false;
-            setCamPosition(glm::vec3( 0, 0, 5));
+            setCamPosition(glm::vec3( 0, 0.55, 5));
             setVerticalAngle(0.0f);
         }else{
             cameraRotates = true;
@@ -366,23 +369,36 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
     }
 
     // TODO choose speed
+    // TODO empecher de dépasser la limite du terrain
     // DISPLACE SPHERE USING T,F,V,G
     else if ( key == GLFW_KEY_T ){
         std::cout << "You have pressed the key T : sphere translation back" << std::endl;
-        root->getChildren()[0]->getData()->transformations[0][2] -= 0.1;
+        sphere->transformations[0][2] -= 0.1;
+        center_sphere[2] -= 0.1;
 
     }else if ( key == GLFW_KEY_V ){
         std::cout << "You have pressed the key V : sphere translation front" << std::endl;
-        root->getChildren()[0]->getData()->transformations[0][2] += 0.1;
+        sphere->transformations[0][2] += 0.1;
+        center_sphere[2] += 0.1;
 
     }else if ( key == GLFW_KEY_F ){
         std::cout << "You have pressed the key F : sphere translation left" << std::endl;
-        root->getChildren()[0]->getData()->transformations[0][0] -= 0.1;
+        sphere->transformations[0][0] -= 0.1;
+        center_sphere[0] -= 0.1;
 
     }else if ( key == GLFW_KEY_G ){
         std::cout << "You have pressed the key G : sphere translation right" << std::endl;
-        root->getChildren()[0]->getData()->transformations[0][0] += 0.1;
+        sphere->transformations[0][0] += 0.1;
+        center_sphere[0] += 0.1;
 
+    }
+
+    if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
+        // follow height of terrain according to heightmap
+        sphere->transformations[0][1] -= center_sphere[1];
+        double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+        sphere->transformations[0][1] += height_sphere + sphere->m_radius + increment_height;
+        center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
     }
 
     if( (key == GLFW_KEY_SLASH or key == GLFW_KEY_EQUAL) and action == GLFW_PRESS){
@@ -390,7 +406,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         // EDIT PLANE
         plane->setDimension(plane_dim, plane_dim);
         plane->clearVectors();
-        plane->generatePlane('y',  glm::vec3(0.0,0.0,0.0));
+        plane->generatePlane('y');
         plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
     }
 

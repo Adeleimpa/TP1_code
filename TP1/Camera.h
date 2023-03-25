@@ -7,6 +7,7 @@
 
 #define PI 3.14159265
 
+// TODO rename class
 class Camera {
 
 private:

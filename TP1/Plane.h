@@ -16,19 +16,32 @@
 class Plane : public SceneObject {
 
 private:
+
+public:
+
     double width;
     double height;
 
     int w;
     int h;
 
-public:
+    glm::vec3 center;
+
+    glm::vec3 bottom_right, bottom_left, top_right, top_left;
+
     Plane() {}
-    Plane( double wi , double he , int nw, int nh) {
+    Plane( double wi , double he , int nw, int nh, glm::vec3 center_coord) {
         width = wi;
         height = he;
         h = nw;
         w = nh;
+        center = center_coord; // TODO not sure center works
+
+        // TODO verify its correct
+        bottom_left = glm::vec3(center[0]-width/2, center[1], center[2]+height/2);
+        bottom_right = glm::vec3(center[0]+width/2, center[1], center[2]+height/2);
+        top_right = glm::vec3(center[0]+width/2, center[1], center[2]-height/2);
+        top_left = glm::vec3(center[0]-width/2, center[1], center[2]-height/2);
     }
 
     void setDimension(int nw, int nh){
@@ -53,18 +66,16 @@ public:
         }
     }
 
-    void generatePlane(char fix_coord, glm::vec3 center){
-
-        // TODO not sure center works
+    void generatePlane(char fix_coord){ // TODO remove fix coord option
 
         glm::vec3 start_corner;
 
         if(fix_coord == 'x'){
-            start_corner = {center[0], center[1]-width/2.0, center[2]-height/2.0};
+            start_corner = glm::vec3(center[0], center[1]-width/2.0, center[2]-height/2.0);
         }else if(fix_coord == 'y'){
-            start_corner = {center[0]-width/2.0, center[1], center[2]-height/2.0};
+            start_corner = glm::vec3(center[0]-width/2.0, center[1], center[2]-height/2.0);
         }else if(fix_coord == 'z'){
-            start_corner = {center[0]-width/2.0, center[1]-height/2.0, center[2]};
+            start_corner = glm::vec3(center[0]-width/2.0, center[1]-height/2.0, center[2]);
         }else{
             std::cout << "WARNING: wrong fixed coordinate in parameters to generate plane" << std::endl;
         }
@@ -81,22 +92,22 @@ public:
                 glm::vec3 normal;
 
                 if(fix_coord == 'x'){
-                    current_corner = {start_corner[0], start_corner[1] + i*step_1, start_corner[2] + j*step_2};
-                    normal = {1.0, 0.0, 0.0};
+                    current_corner = glm::vec3(start_corner[0], start_corner[1] + i*step_1, start_corner[2] + j*step_2);
+                    normal = glm::vec3(1.0, 0.0, 0.0);
                     // texture
-                    coord_texture.push_back({current_corner[1]/width, 1.0-current_corner[2]/height});
+                    coord_texture.push_back(glm::vec2(current_corner[1]/width, 1.0-current_corner[2]/height));
 
                 }else if(fix_coord == 'y') {
-                    current_corner = {start_corner[0] + i*step_1, start_corner[1], start_corner[2] + j*step_2};
-                    normal = {0.0, 1.0, 0.0};
+                    current_corner = glm::vec3(start_corner[0] + i*step_1, start_corner[1], start_corner[2] + j*step_2);
+                    normal = glm::vec3(0.0, 1.0, 0.0);
                     // texture
-                    coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[2]/height});
+                    coord_texture.push_back(glm::vec2(current_corner[0]/width, 1.0-current_corner[2]/height));
 
                 }else if(fix_coord == 'z'){
-                    current_corner = {start_corner[0] + i*step_1, start_corner[1] + j*step_2, start_corner[2]};
-                    normal = {0.0, 0.0, 1.0};
+                    current_corner = glm::vec3(start_corner[0] + i*step_1, start_corner[1] + j*step_2, start_corner[2]);
+                    normal = glm::vec3(0.0, 0.0, 1.0);
                     // texture
-                    coord_texture.push_back({current_corner[0]/width, 1.0-current_corner[1]/height});
+                    coord_texture.push_back(glm::vec2(current_corner[0]/width, 1.0-current_corner[1]/height));
                 }
 
                 //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
@@ -186,13 +197,26 @@ public:
         }
     }
 
-    glm::vec3 getMiddleVertex(){
-        // TODO make it work for any resolution and any dimension
+    double getHeightFromCoords(unsigned char *HM_data, int height_HM, int width_HM, glm::vec3 coords){
 
-        int middle_h = (h+1)/2;
-        int middle_w = (w+1)/2;
+        double dist_from_zero_x = center[0] - (width/2.0);
+        double ratio_x = (coords[0] - dist_from_zero_x)/width;
 
-        return indexed_vertices[middle_h*(h+1) + middle_w];
+        int row_HM = floor(ratio_x*width_HM);
+
+        double dist_from_zero_z = center[2] - (height/2.0);
+        double ratio_z = (coords[2] - dist_from_zero_z)/height;
+
+        int col_HM = floor(ratio_z*height_HM);
+
+        int dat = (int) HM_data[row_HM*width_HM + col_HM];
+
+        int range_ndg_HM = 256;
+        double max = 1.0; // maximum height
+        double ratio = (double)dat/(double)range_ndg_HM;
+        double difference = max*ratio;
+
+        return max - difference;
     }
 
 
