@@ -11,14 +11,23 @@ class Sphere : public MeshObject {
 public:
     glm::vec3 m_center;
     float m_radius;
-    //unsigned int nTheta, nPhi;
+
+    // default resolution
+    unsigned int nTheta = 100;
+    unsigned int nPhi = 100;
 
     Sphere() : MeshObject() {}
 
     Sphere(glm::vec3 c, float r) : MeshObject(), m_center(c), m_radius(r) {}
 
+    void setResolution(unsigned int reso){
+        nTheta = reso;
+        nPhi = reso;
+        std::cout << "theta =" << nTheta << std::endl;
+        std::cout << "phi =" << nPhi << std::endl;
+    }
+
     void build_arrays() {
-        unsigned int nTheta = 20, nPhi = 20;
         indexed_vertices.resize(nTheta * nPhi);
         normals.resize(nTheta * nPhi);
         coord_texture.resize(nTheta * nPhi);

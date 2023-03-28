@@ -25,19 +25,17 @@ public:
     int w;
     int h;
 
-    glm::vec3 center;
+    glm::vec3 center = glm::vec3(0.0,0.0,0.0); // default value
 
     glm::vec3 bottom_right, bottom_left, top_right, top_left;
 
     Plane() {}
-    Plane( double wi , double he , int nw, int nh, glm::vec3 center_coord) {
+    Plane( double wi , double he , int nw, int nh) {
         width = wi;
         height = he;
         h = nw;
         w = nh;
-        center = center_coord; // TODO not sure center works
 
-        // TODO verify its correct
         bottom_left = glm::vec3(center[0]-width/2, center[1], center[2]+height/2);
         bottom_right = glm::vec3(center[0]+width/2, center[1], center[2]+height/2);
         top_right = glm::vec3(center[0]+width/2, center[1], center[2]-height/2);
@@ -198,6 +196,8 @@ public:
     }
 
     double getHeightFromCoords(unsigned char *HM_data, int height_HM, int width_HM, glm::vec3 coords){
+
+        // TODO doesn't work for bottom_right and top_right corners!
 
         double dist_from_zero_x = center[0] - (width/2.0);
         double ratio_x = (coords[0] - dist_from_zero_x)/width;

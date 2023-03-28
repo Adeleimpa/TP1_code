@@ -49,23 +49,6 @@ public:
         }
     }
 
-    /* UNUSED
-    // general method to draw scene graph
-    void drawGraph(SceneGraph root, GLuint programID){
-
-        SceneObject obj_root = root.getData();
-
-        obj_root.loadBuffers();
-        obj_root.draw(programID);
-
-        for(SceneGraph *child : root.getChildren()){
-            SceneObject child_obj = child->getData();
-
-            child_obj.loadBuffers();
-            child_obj.draw(programID);
-        }
-    }*/
-
 };
 
 

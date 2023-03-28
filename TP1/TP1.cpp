@@ -69,8 +69,8 @@ float zoom = 1.;
 
 // plane data
 float plane_len =  3.8;
-int plane_dim = 50;
-Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim, glm::vec3(0.0,0.0,0.0));
+int plane_dim = 40;
+Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim));
 
 // sphere data
 Sphere *sphere = new Sphere();
@@ -187,7 +187,7 @@ int main( void )
     // -----------------------------------------------------------------------------------
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
-    sphere->m_radius = 0.11f;
+    sphere->m_radius = 0.05f;
     center_sphere = glm::vec3(plane->center[0], 0.0, plane->center[2]);
     double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
     center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
@@ -314,6 +314,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
+    double offset = 0.01;
+
     if( key == GLFW_KEY_EQUAL and action == GLFW_PRESS ){ // minus on macbook keyboard
         std::cout << "You have pressed the key - : resolution decreases" << std::endl;
 
@@ -343,6 +345,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
         /// turn around axis
 
+        // TODO doesn't work when center of plane is not 0,0,0
         if(cameraRotates){
             cameraRotates = false;
             setCamPosition(glm::vec3( 0, 0.55, 5));
@@ -368,28 +371,54 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
 
     }
 
-    // TODO choose speed
-    // TODO empecher de dépasser la limite du terrain
     // DISPLACE SPHERE USING T,F,V,G
     else if ( key == GLFW_KEY_T ){
         std::cout << "You have pressed the key T : sphere translation back" << std::endl;
-        sphere->transformations[0][2] -= 0.1;
-        center_sphere[2] -= 0.1;
+
+        // if object doesn't go farther than terrain area
+        if(center_sphere[2] - offset > plane->top_right[2] and center_sphere[2] - offset < plane->bottom_right[2]) {
+            sphere->transformations[0][2] -= offset;
+            center_sphere[2] -= offset;
+        }
+
+        // TODO debug
+        // check if object is too far from camera -> decrease resolution
+        /*glm::vec3 camPos = getCamPosition();
+        double distance_from_cam = camPos[2] - center_sphere[2];
+        if(distance_from_cam > 4.0){
+            std::cout << "decrease reso sphere" << std::endl;
+            sphere->setResolution(sphere->nPhi - 10);
+            sphere->build_arrays();
+        }*/
 
     }else if ( key == GLFW_KEY_V ){
         std::cout << "You have pressed the key V : sphere translation front" << std::endl;
-        sphere->transformations[0][2] += 0.1;
-        center_sphere[2] += 0.1;
+
+        // if object doesn't go farther than terrain area
+        if(center_sphere[2] + offset > plane->top_right[2] and center_sphere[2] + offset < plane->bottom_right[2]){
+            sphere->transformations[0][2] += offset;
+            center_sphere[2] += offset;
+        }
+
+        // TODO check if object is close to camera -> increase resolution
 
     }else if ( key == GLFW_KEY_F ){
         std::cout << "You have pressed the key F : sphere translation left" << std::endl;
-        sphere->transformations[0][0] -= 0.1;
-        center_sphere[0] -= 0.1;
+
+        // if object doesn't go farther than terrain area
+        if(center_sphere[0] - offset > plane->top_right[2] and center_sphere[0] - offset < plane->bottom_right[2]){
+            sphere->transformations[0][0] -= offset;
+            center_sphere[0] -= offset;
+        }
 
     }else if ( key == GLFW_KEY_G ){
         std::cout << "You have pressed the key G : sphere translation right" << std::endl;
-        sphere->transformations[0][0] += 0.1;
-        center_sphere[0] += 0.1;
+
+        // if object doesn't go farther than terrain area
+        if(center_sphere[0] + offset > plane->top_right[2] and center_sphere[0] + offset < plane->bottom_right[2]) {
+            sphere->transformations[0][0] += offset;
+            center_sphere[0] += offset;
+        }
     }
 
     if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
