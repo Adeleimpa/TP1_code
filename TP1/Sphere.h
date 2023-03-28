@@ -11,6 +11,7 @@ class Sphere : public MeshObject {
 public:
     glm::vec3 m_center;
     float m_radius;
+    //unsigned int nTheta, nPhi;
 
     Sphere() : MeshObject() {}
 

@@ -69,7 +69,7 @@ float zoom = 1.;
 
 // plane data
 float plane_len =  3.8;
-int plane_dim = 30;
+int plane_dim = 50;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim, glm::vec3(0.0,0.0,0.0));
 
 // sphere data
@@ -177,7 +177,7 @@ int main( void )
     //plane->addRelief('y');
 
     // use height map
-    height_map->readPGMTexture((char*)"textures/Heightmap_Mountain128.pgm");
+    height_map->readPGMTexture((char*)"textures/Heightmap_Mountain512.pgm");
     plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
 
     plane->setColor(glm::vec4(0.2, 0.8, 0.05, 0.0));
@@ -390,7 +390,6 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         std::cout << "You have pressed the key G : sphere translation right" << std::endl;
         sphere->transformations[0][0] += 0.1;
         center_sphere[0] += 0.1;
-
     }
 
     if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
