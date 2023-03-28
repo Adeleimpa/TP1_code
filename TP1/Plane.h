@@ -47,36 +47,19 @@ public:
         w = nh;
     }
 
-    void addRelief(char fix_coord){
+    void addRelief(){
         for(int i = 0; i < indexed_vertices.size(); i++){
 
             double f = (double)rand() / RAND_MAX;
             double rand_d = -0.2 + f * (0.2 - (-0.2));
 
-            if(fix_coord == 'x'){
-                indexed_vertices[i][0] += rand_d;
-            }else if(fix_coord == 'y'){
-                indexed_vertices[i][1] += rand_d;
-            }else if(fix_coord == 'z'){
-                indexed_vertices[i][2] += rand_d;
-            }
-
+            indexed_vertices[i][1] += rand_d;
         }
     }
 
-    void generatePlane(char fix_coord){ // TODO remove fix coord option
+    void generatePlane(){
 
-        glm::vec3 start_corner;
-
-        if(fix_coord == 'x'){
-            start_corner = glm::vec3(center[0], center[1]-width/2.0, center[2]-height/2.0);
-        }else if(fix_coord == 'y'){
-            start_corner = glm::vec3(center[0]-width/2.0, center[1], center[2]-height/2.0);
-        }else if(fix_coord == 'z'){
-            start_corner = glm::vec3(center[0]-width/2.0, center[1]-height/2.0, center[2]);
-        }else{
-            std::cout << "WARNING: wrong fixed coordinate in parameters to generate plane" << std::endl;
-        }
+        glm::vec3 start_corner = glm::vec3(center[0]-width/2.0, center[1], center[2]-height/2.0);
 
         double step_1 = width/(double)w;
         double step_2 = height/(double)h;
@@ -86,29 +69,9 @@ public:
         // fill indexed_vertices
         for(int i = 0; i <= h; i++) {
             for (int j = 0; j <= w; j++) {
-
-                glm::vec3 normal;
-
-                if(fix_coord == 'x'){
-                    current_corner = glm::vec3(start_corner[0], start_corner[1] + i*step_1, start_corner[2] + j*step_2);
-                    normal = glm::vec3(1.0, 0.0, 0.0);
-                    // texture
-                    coord_texture.push_back(glm::vec2(current_corner[1]/width, 1.0-current_corner[2]/height));
-
-                }else if(fix_coord == 'y') {
-                    current_corner = glm::vec3(start_corner[0] + i*step_1, start_corner[1], start_corner[2] + j*step_2);
-                    normal = glm::vec3(0.0, 1.0, 0.0);
-                    // texture
-                    coord_texture.push_back(glm::vec2(current_corner[0]/width, 1.0-current_corner[2]/height));
-
-                }else if(fix_coord == 'z'){
-                    current_corner = glm::vec3(start_corner[0] + i*step_1, start_corner[1] + j*step_2, start_corner[2]);
-                    normal = glm::vec3(0.0, 0.0, 1.0);
-                    // texture
-                    coord_texture.push_back(glm::vec2(current_corner[0]/width, 1.0-current_corner[1]/height));
-                }
-
-                //std::cout << current_corner[0] << current_corner[1] << current_corner[2] << std::endl;
+                current_corner = glm::vec3(start_corner[0] + i*step_1, start_corner[1], start_corner[2] + j*step_2);
+                glm::vec3 normal = glm::vec3(0.0, 1.0, 0.0);
+                coord_texture.push_back(glm::vec2(current_corner[0]/width, 1.0-current_corner[2]/height));
                 indexed_vertices.push_back(current_corner);
                 normals.push_back(normal);
             }
@@ -148,8 +111,7 @@ public:
     }
 
 
-    void addHeightMap(unsigned char *HM_data, int height_HM, int width_HM,
-                      char fix_coord){
+    void addHeightMap(unsigned char *HM_data, int height_HM, int width_HM){
         double max = 1.0; // maximum height
         double min = 0.0; // minimum height
         // TODO adapt to any max and min value -> shader
@@ -184,14 +146,7 @@ public:
             double difference = max*ratio;
             //std::cout << "difference :" << difference << std::endl;
 
-            if(fix_coord == 'x'){
-                indexed_vertices[i][0] = max - difference;
-            }else if(fix_coord == 'y'){
-                indexed_vertices[i][1] = max - difference;
-            }else if(fix_coord == 'z'){
-                indexed_vertices[i][2] = max - difference;
-                //std::cout << "new coord (z):" << indexed_vertices[i][2] << std::endl;
-            }
+            indexed_vertices[i][1] = max - difference;
         }
     }
 

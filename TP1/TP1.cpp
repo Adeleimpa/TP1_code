@@ -171,14 +171,14 @@ int main( void )
     // GENERATE TERRAIN (TP1 & 2)
     // ------------------------------------------------------------------------------------
     // generate plane -> fill arrays of indices, triangles and indexed_vertices
-    plane->generatePlane('y');
+    plane->generatePlane();
     plane->setIsTerrain(1);
     plane->generateBuffers();
-    //plane->addRelief('y');
+    //plane->addRelief();
 
     // use height map
     height_map->readPGMTexture((char*)"textures/Heightmap_Mountain512.pgm");
-    plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
+    plane->addHeightMap(height_map->data, height_map->height, height_map->width);
 
     plane->setColor(glm::vec4(0.2, 0.8, 0.05, 0.0));
     scene_objects.push_back(plane);
@@ -434,8 +434,8 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         // EDIT PLANE
         plane->setDimension(plane_dim, plane_dim);
         plane->clearVectors();
-        plane->generatePlane('y');
-        plane->addHeightMap(height_map->data, height_map->height, height_map->width,'y');
+        plane->generatePlane();
+        plane->addHeightMap(height_map->data, height_map->height, height_map->width);
     }
 
 }
