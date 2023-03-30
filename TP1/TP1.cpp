@@ -70,7 +70,7 @@ float zoom = 1.;
 // plane data
 float plane_len =  3.8;
 int plane_dim = 40;
-Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim));
+Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // sphere data
 Sphere *sphere = new Sphere();
@@ -187,7 +187,7 @@ int main( void )
     // -----------------------------------------------------------------------------------
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
-    sphere->m_radius = 0.05f;
+    sphere->m_radius =  0.4f;//0.05f;
     center_sphere = glm::vec3(plane->center[0], 0.0, plane->center[2]);
     double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
     center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
@@ -381,15 +381,6 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
             center_sphere[2] -= offset;
         }
 
-        // TODO debug
-        // check if object is too far from camera -> decrease resolution
-        /*glm::vec3 camPos = getCamPosition();
-        double distance_from_cam = camPos[2] - center_sphere[2];
-        if(distance_from_cam > 4.0){
-            std::cout << "decrease reso sphere" << std::endl;
-            sphere->setResolution(sphere->nPhi - 10);
-            sphere->build_arrays();
-        }*/
 
     }else if ( key == GLFW_KEY_V ){
         std::cout << "You have pressed the key V : sphere translation front" << std::endl;
@@ -399,8 +390,6 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
             sphere->transformations[0][2] += offset;
             center_sphere[2] += offset;
         }
-
-        // TODO check if object is close to camera -> increase resolution
 
     }else if ( key == GLFW_KEY_F ){
         std::cout << "You have pressed the key F : sphere translation left" << std::endl;
@@ -422,11 +411,35 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
     }
 
     if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
+        // ----------------------------------------------------------------
         // follow height of terrain according to heightmap
         sphere->transformations[0][1] -= center_sphere[1];
         double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
         sphere->transformations[0][1] += height_sphere + sphere->m_radius + increment_height;
         center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
+        // ----------------------------------------------------------------
+
+        // ----------------------------------------------------------------
+        // check if object is too far from camera -> decrease resolution
+        glm::vec3 camPos = getCamPosition();
+        double distance_from_cam = camPos[2] - center_sphere[2];
+        unsigned int new_resol;
+
+        if(distance_from_cam > 6.0){ // back
+            new_resol = sphere->back_resolution;
+        }else if(distance_from_cam <= 6.0 and distance_from_cam > 4.0){ // middle
+            new_resol = sphere->middle_resolution;
+        }else{ // front
+            new_resol = sphere->front_resolution;
+        }
+
+        // do it only if new resolution
+        if(new_resol != sphere->resolution){
+            sphere->setResolution(new_resol);
+            sphere->clearVectors();
+            sphere->build_arrays();
+        }
+        // ----------------------------------------------------------------
     }
 
     if( (key == GLFW_KEY_SLASH or key == GLFW_KEY_EQUAL) and action == GLFW_PRESS){

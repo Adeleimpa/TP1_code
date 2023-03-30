@@ -13,30 +13,32 @@ public:
     float m_radius;
 
     // default resolution
-    unsigned int nTheta = 100;
-    unsigned int nPhi = 100;
+    unsigned int resolution = 30;
+
+    // resolutions depending on distance from camera
+    const unsigned int front_resolution = 40;
+    const unsigned int middle_resolution = 20;
+    const unsigned int back_resolution = 10;
 
     Sphere() : MeshObject() {}
 
     Sphere(glm::vec3 c, float r) : MeshObject(), m_center(c), m_radius(r) {}
 
-    void setResolution(unsigned int reso){
-        nTheta = reso;
-        nPhi = reso;
-        std::cout << "theta =" << nTheta << std::endl;
-        std::cout << "phi =" << nPhi << std::endl;
+    void setResolution(unsigned int new_resolution){
+        resolution = new_resolution;
+        std::cout << "resolution =" << resolution << std::endl;
     }
 
     void build_arrays() {
-        indexed_vertices.resize(nTheta * nPhi);
-        normals.resize(nTheta * nPhi);
-        coord_texture.resize(nTheta * nPhi);
-        for (unsigned int thetaIt = 0; thetaIt < nTheta; ++thetaIt) {
-            float u = (float) (thetaIt) / (float) (nTheta - 1);
+        indexed_vertices.resize(resolution * resolution);
+        normals.resize(resolution * resolution);
+        coord_texture.resize(resolution * resolution);
+        for (unsigned int thetaIt = 0; thetaIt < resolution; ++thetaIt) {
+            float u = (float) (thetaIt) / (float) (resolution - 1);
             float theta = u * 2 * M_PI;
-            for (unsigned int phiIt = 0; phiIt < nPhi; ++phiIt) {
-                unsigned int vertexIndex = thetaIt + phiIt * nTheta;
-                float v = (float) (phiIt) / (float) (nPhi - 1);
+            for (unsigned int phiIt = 0; phiIt < resolution; ++phiIt) {
+                unsigned int vertexIndex = thetaIt + phiIt * resolution;
+                float v = (float) (phiIt) / (float) (resolution - 1);
                 float phi = -M_PI / 2.0 + v * M_PI;
                 glm::vec3 xyz = SphericalCoordinatesToEuclidean(theta, phi);
                 indexed_vertices[vertexIndex] = m_center + m_radius * xyz;
@@ -46,12 +48,12 @@ public:
             }
         }
         triangles.clear();
-        for (unsigned int thetaIt = 0; thetaIt < nTheta - 1; ++thetaIt) {
-            for (unsigned int phiIt = 0; phiIt < nPhi - 1; ++phiIt) {
-                unsigned short vertexuv = thetaIt + phiIt * nTheta;
-                unsigned short vertexUv = thetaIt + 1 + phiIt * nTheta;
-                unsigned short vertexuV = thetaIt + (phiIt + 1) * nTheta;
-                unsigned short vertexUV = thetaIt + 1 + (phiIt + 1) * nTheta;
+        for (unsigned int thetaIt = 0; thetaIt < resolution - 1; ++thetaIt) {
+            for (unsigned int phiIt = 0; phiIt < resolution - 1; ++phiIt) {
+                unsigned short vertexuv = thetaIt + phiIt * resolution;
+                unsigned short vertexUv = thetaIt + 1 + phiIt * resolution;
+                unsigned short vertexuV = thetaIt + (phiIt + 1) * resolution;
+                unsigned short vertexUV = thetaIt + 1 + (phiIt + 1) * resolution;
 
                 indices.push_back(vertexuv);
                 indices.push_back(vertexUv);
