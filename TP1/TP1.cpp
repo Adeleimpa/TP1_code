@@ -193,6 +193,7 @@ int main( void )
     center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
     sphere->m_center = center_sphere;
     sphere->build_arrays();
+    sphere->build_arrays_for_resolutions();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
     sphere->generateBuffers();
 
