@@ -26,24 +26,6 @@ public:
     std::vector<std::vector<glm::vec2> > coord_texture_Res = std::vector<std::vector<glm::vec2> >(3);
     std::vector<std::vector<glm::vec3> > normals_Res = std::vector<std::vector<glm::vec3> >(3);
 
-    /*std::vector<unsigned short> indices_lowRes;
-    std::vector<std::vector<unsigned short> > triangles_lowRes;
-    std::vector<glm::vec3> indexed_vertices_lowRes;
-    std::vector<glm::vec2> coord_texture_lowRes;
-    std::vector<glm::vec3> normals_lowRes;
-
-    std::vector<unsigned short> indices_avgRes;
-    std::vector<std::vector<unsigned short> > triangles_avgRes;
-    std::vector<glm::vec3> indexed_vertices_avgRes;
-    std::vector<glm::vec2> coord_texture_avgRes;
-    std::vector<glm::vec3> normals_avgRes;
-
-    std::vector<unsigned short> indices_highRes;
-    std::vector<std::vector<unsigned short> > triangles_highRes;
-    std::vector<glm::vec3> indexed_vertices_highRes;
-    std::vector<glm::vec2> coord_texture_highRes;
-    std::vector<glm::vec3> normals_highRes;*/
-
     Sphere() : MeshObject() {}
 
     Sphere(glm::vec3 c, float r) : MeshObject(), m_center(c), m_radius(r) {}
@@ -110,8 +92,6 @@ public:
                 }
             }
         }
-
-
     }
 
     void build_arrays() {
@@ -161,6 +141,15 @@ public:
                 triangles.push_back(t2);
             }
         }
+    }
+
+
+    void switchResolution(int resolution_index){
+        indices = indices_Res[resolution_index];
+        triangles = triangles_Res[resolution_index];
+        indexed_vertices = indexed_vertices_Res[resolution_index];
+        coord_texture = coord_texture_Res[resolution_index];
+        normals = normals_Res[resolution_index];
     }
 
     glm::vec3 SphericalCoordinatesToEuclidean( float theta , float phi ) {

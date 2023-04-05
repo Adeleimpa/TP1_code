@@ -424,13 +424,17 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         // check if object is too far from camera -> decrease resolution
         glm::vec3 camPos = getCamPosition();
         double distance_from_cam = camPos[2] - center_sphere[2];
-        unsigned int new_resol;
 
+        unsigned int new_resol;
+        int reso;
         if(distance_from_cam > 6.0){ // back
+            reso = 0;
             new_resol = sphere->back_resolution;
         }else if(distance_from_cam <= 6.0 and distance_from_cam > 4.0){ // middle
+            reso = 1;
             new_resol = sphere->middle_resolution;
         }else{ // front
+            reso = 2;
             new_resol = sphere->front_resolution;
         }
 
@@ -438,7 +442,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         if(new_resol != sphere->resolution){
             sphere->setResolution(new_resol);
             sphere->clearVectors();
-            sphere->build_arrays();
+            sphere->switchResolution(reso);
         }
         // ----------------------------------------------------------------
     }
