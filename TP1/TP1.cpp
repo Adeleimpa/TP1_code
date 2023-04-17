@@ -76,8 +76,7 @@ Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // sphere data
 Sphere *sphere = new Sphere();
-glm::vec3 center_sphere;
-double increment_height = 0.03;
+double fly_time = 2.0; // in seconds // TODO remove fly time and use gravity and weight to stop fly
 
 SceneGraph *root = new SceneGraph();
 
@@ -192,13 +191,13 @@ int main( void )
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
     sphere->m_radius =  0.1f;//0.05f;
-    center_sphere = glm::vec3(plane->center[0], 0.0, plane->center[2]);
+    sphere->m_center = glm::vec3(plane->center[0], 0.0, plane->center[2]);
     double height_sphere = 0.0;
     if(heightmap_activated){
-        height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+        height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, sphere->m_center);
     }
-    center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
-    sphere->m_center = center_sphere;
+    sphere->m_center[1] = height_sphere + sphere->m_radius;
+    //sphere->m_center = center_sphere;
     sphere->build_arrays();
     sphere->build_arrays_for_resolutions();
     sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
@@ -248,6 +247,7 @@ int main( void )
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
+    double counter_flying = 0.0;
 
     do{
         // Measure speed
@@ -268,6 +268,17 @@ int main( void )
         speedUp = false;
         slowDown = false;
         camera->sendMVPtoShader(programID);
+
+        // flying sphere
+        if(sphere->isFlying){
+            counter_flying += deltaTime;
+            if(counter_flying < fly_time){
+                sphere->fly(deltaTime, 1);
+            }else{
+                sphere->isFlying = false;
+                std::cout << "fly is over" << std::endl;
+            }
+        }
 
         // Draw the triangles !
         /*for(int i = 0; i < scene_objects.size(); i++){
@@ -384,9 +395,9 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         std::cout << "You have pressed the key T : sphere translation back" << std::endl;
 
         // if object doesn't go farther than terrain area
-        if(center_sphere[2] - offset > plane->top_right[2] and center_sphere[2] - offset < plane->bottom_right[2]) {
+        if(sphere->m_center[2] - offset > plane->top_right[2] and sphere->m_center[2] - offset < plane->bottom_right[2]) {
             sphere->transformations[0][2] -= offset;
-            center_sphere[2] -= offset;
+            sphere->m_center[2] -= offset;
         }
 
 
@@ -394,48 +405,50 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
         std::cout << "You have pressed the key V : sphere translation front" << std::endl;
 
         // if object doesn't go farther than terrain area
-        if(center_sphere[2] + offset > plane->top_right[2] and center_sphere[2] + offset < plane->bottom_right[2]){
+        if(sphere->m_center[2] + offset > plane->top_right[2] and sphere->m_center[2] + offset < plane->bottom_right[2]){
             sphere->transformations[0][2] += offset;
-            center_sphere[2] += offset;
+            sphere->m_center[2] += offset;
         }
 
     }else if ( key == GLFW_KEY_F ){
         std::cout << "You have pressed the key F : sphere translation left" << std::endl;
 
         // if object doesn't go farther than terrain area
-        if(center_sphere[0] - offset > plane->top_right[2] and center_sphere[0] - offset < plane->bottom_right[2]){
+        if(sphere->m_center[0] - offset > plane->top_right[2] and sphere->m_center[0] - offset < plane->bottom_right[2]){
             sphere->transformations[0][0] -= offset;
-            center_sphere[0] -= offset;
+            sphere->m_center[0] -= offset;
         }
 
     }else if ( key == GLFW_KEY_G ){
         std::cout << "You have pressed the key G : sphere translation right" << std::endl;
 
         // if object doesn't go farther than terrain area
-        if(center_sphere[0] + offset > plane->top_right[2] and center_sphere[0] + offset < plane->bottom_right[2]) {
+        if(sphere->m_center[0] + offset > plane->top_right[2] and sphere->m_center[0] + offset < plane->bottom_right[2]) {
             sphere->transformations[0][0] += offset;
-            center_sphere[0] += offset;
+            sphere->m_center[0] += offset;
         }
     }else if ( key == GLFW_KEY_SPACE and action == GLFW_PRESS ){
-        // TODO make sphere fly and fall down
+        sphere->isFlying = true;
+        std::cout << "fly starts" << std::endl;
+        sphere->velocity = glm::vec3(1.0,1.0,0.0) * glm::vec3(0.2,0.2,0.2);
     }
 
     if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
         // ----------------------------------------------------------------
         // follow height of terrain according to heightmap
-        sphere->transformations[0][1] -= center_sphere[1];
+        sphere->transformations[0][1] -= sphere->m_center[1];
         double height_sphere = 0.0;
         if(heightmap_activated){
-            height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+            height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, sphere->m_center);
         }
-        sphere->transformations[0][1] += height_sphere + sphere->m_radius + increment_height;
-        center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
+        sphere->transformations[0][1] += height_sphere + sphere->m_radius;
+        sphere->m_center[1] = height_sphere + sphere->m_radius;
         // ----------------------------------------------------------------
 
         // ----------------------------------------------------------------
         // check if object is too far from camera -> decrease resolution
         glm::vec3 camPos = getCamPosition();
-        double distance_from_cam = camPos[2] - center_sphere[2];
+        double distance_from_cam = camPos[2] - sphere->m_center[2];
 
         unsigned int new_resol;
         int reso;

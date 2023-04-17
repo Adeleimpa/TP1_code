@@ -12,6 +12,10 @@ public:
     glm::vec3 m_center;
     float m_radius;
 
+    bool isFlying = false;
+    float weight = 10;
+    glm::vec3 velocity;
+
     // default resolution
     unsigned int resolution = 30;
 
@@ -143,7 +147,6 @@ public:
         }
     }
 
-
     void switchResolution(int resolution_index){
         indices = indices_Res[resolution_index];
         triangles = triangles_Res[resolution_index];
@@ -154,6 +157,13 @@ public:
 
     glm::vec3 SphericalCoordinatesToEuclidean( float theta , float phi ) {
         return glm::vec3( cos(theta) * cos(phi) , sin(theta) * cos(phi) , sin(phi) );
+    }
+
+    void fly(double delta_time, double initial_speed){
+        transformations[0][0] += initial_speed*delta_time;
+        transformations[0][1] += initial_speed*delta_time;
+        m_center[0] += initial_speed*delta_time;
+        m_center[1] += initial_speed*delta_time;
     }
 };
 
