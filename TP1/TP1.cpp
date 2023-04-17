@@ -67,6 +67,8 @@ Transform transformer; // to transform scene objects one by one
 float angle = 0.;
 float zoom = 1.;
 
+bool heightmap_activated = false;
+
 // plane data
 float plane_len =  3.8;
 int plane_dim = 40;
@@ -177,8 +179,10 @@ int main( void )
     //plane->addRelief();
 
     // use height map
-    height_map->readPGMTexture((char*)"textures/Heightmap_Mountain512.pgm");
-    plane->addHeightMap(height_map->data, height_map->height, height_map->width);
+    if(heightmap_activated){
+        height_map->readPGMTexture((char*)"textures/Heightmap_Mountain512.pgm");
+        plane->addHeightMap(height_map->data, height_map->height, height_map->width);
+    }
 
     plane->setColor(glm::vec4(0.2, 0.8, 0.05, 0.0));
     scene_objects.push_back(plane);
@@ -187,9 +191,12 @@ int main( void )
     // -----------------------------------------------------------------------------------
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
-    sphere->m_radius =  0.4f;//0.05f;
+    sphere->m_radius =  0.1f;//0.05f;
     center_sphere = glm::vec3(plane->center[0], 0.0, plane->center[2]);
-    double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+    double height_sphere = 0.0;
+    if(heightmap_activated){
+        height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+    }
     center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
     sphere->m_center = center_sphere;
     sphere->build_arrays();
@@ -409,13 +416,18 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
             sphere->transformations[0][0] += offset;
             center_sphere[0] += offset;
         }
+    }else if ( key == GLFW_KEY_SPACE and action == GLFW_PRESS ){
+        // TODO make sphere fly and fall down
     }
 
     if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
         // ----------------------------------------------------------------
         // follow height of terrain according to heightmap
         sphere->transformations[0][1] -= center_sphere[1];
-        double height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+        double height_sphere = 0.0;
+        if(heightmap_activated){
+            height_sphere = plane->getHeightFromCoords(height_map->data, height_map->height, height_map->width, center_sphere);
+        }
         sphere->transformations[0][1] += height_sphere + sphere->m_radius + increment_height;
         center_sphere[1] = height_sphere + sphere->m_radius + increment_height;
         // ----------------------------------------------------------------

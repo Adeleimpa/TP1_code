@@ -44,8 +44,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="680caa9c-3924-449d-86dc-26a773c13fd0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/TP1/Sphere.h" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/Sphere.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1/TP1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/build/TP1" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,7 +274,8 @@
       <workItem from="1678301663482" duration="240000" />
       <workItem from="1678374377124" duration="41697000" />
       <workItem from="1678953245420" duration="29706000" />
-      <workItem from="1680712470194" duration="3598000" />
+      <workItem from="1680712470194" duration="4633000" />
+      <workItem from="1681737062423" duration="1335000" />
     </task>
     <servers />
   </component>
