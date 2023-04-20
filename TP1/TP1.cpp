@@ -70,13 +70,13 @@ float zoom = 1.;
 bool heightmap_activated = false;
 
 // plane data
-float plane_len =  3.8;
+float plane_len =  9.0;
 int plane_dim = 40;
 Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // sphere data
 Sphere *sphere = new Sphere();
-double initial_speed = 1.5;
+double initial_speed = 2.2;
 
 SceneGraph *root = new SceneGraph();
 
@@ -276,7 +276,7 @@ int main( void )
                 sphere->velocity = -sphere->velocity;
                 sphere->velocity[0] = -sphere->velocity[0];
             }
-            if(sphere->velocity[1] < 0.00001 and sphere->m_center[1]-sphere->m_radius < 0.00001){
+            if(sphere->velocity[1] < 0.000001 and sphere->m_center[1]-sphere->m_radius < 0.00001){
                 sphere->isFlying = false;
                 sphere->velocity = glm::vec3(0.0,0.0,0.0);
                 std::cout << "fly is over" << std::endl;
