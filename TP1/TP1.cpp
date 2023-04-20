@@ -272,11 +272,14 @@ int main( void )
         // flying sphere
         if(sphere->isFlying){
             sphere->fly(deltaTime);
-            if(sphere->m_center[1]-sphere->m_radius < 0.00001){
+            if(sphere->m_center[1]-sphere->m_radius < 0.00001){ // if sphere reaches the floor
+                // jump
                 sphere->velocity = -sphere->velocity;
                 sphere->velocity[0] = -sphere->velocity[0];
             }
+            // if sphere reaches the floor and has a very small velocity
             if(sphere->velocity[1] < 0.000001 and sphere->m_center[1]-sphere->m_radius < 0.00001){
+                // stop flying
                 sphere->isFlying = false;
                 sphere->velocity = glm::vec3(0.0,0.0,0.0);
                 std::cout << "fly is over" << std::endl;
