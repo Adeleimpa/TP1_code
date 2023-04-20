@@ -165,7 +165,6 @@ public:
     void fly(double delta_time){
 
         acceleration = glm::vec3(0,-GRAVITY,0);
-
         velocity += glm::vec3(acceleration[0]*delta_time, acceleration[1]*delta_time, acceleration[2]*delta_time);
 
         transformations[0][0] += velocity[0]*delta_time;
