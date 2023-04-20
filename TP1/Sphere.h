@@ -7,6 +7,8 @@
 
 #include "MeshObject.h"
 
+#define GRAVITY 8
+
 class Sphere : public MeshObject {
 public:
     glm::vec3 m_center;
@@ -15,6 +17,7 @@ public:
     bool isFlying = false;
     float weight = 10;
     glm::vec3 velocity;
+    glm::vec3 acceleration;
 
     // default resolution
     unsigned int resolution = 30;
@@ -159,11 +162,16 @@ public:
         return glm::vec3( cos(theta) * cos(phi) , sin(theta) * cos(phi) , sin(phi) );
     }
 
-    void fly(double delta_time, double initial_speed){
-        transformations[0][0] += initial_speed*delta_time;
-        transformations[0][1] += initial_speed*delta_time;
-        m_center[0] += initial_speed*delta_time;
-        m_center[1] += initial_speed*delta_time;
+    void fly(double delta_time){
+
+        acceleration = glm::vec3(0,-GRAVITY,0);
+
+        velocity += glm::vec3(acceleration[0]*delta_time, acceleration[1]*delta_time, acceleration[2]*delta_time);
+
+        transformations[0][0] += velocity[0]*delta_time;
+        transformations[0][1] += velocity[1]*delta_time;
+        m_center[0] += velocity[0]*delta_time;
+        m_center[1] += velocity[1]*delta_time;
     }
 };
 

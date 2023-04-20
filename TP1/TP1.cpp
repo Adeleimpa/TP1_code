@@ -76,7 +76,7 @@ Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
 
 // sphere data
 Sphere *sphere = new Sphere();
-double fly_time = 2.0; // in seconds // TODO remove fly time and use gravity and weight to stop fly
+double initial_speed = 1.5;
 
 SceneGraph *root = new SceneGraph();
 
@@ -271,11 +271,14 @@ int main( void )
 
         // flying sphere
         if(sphere->isFlying){
-            counter_flying += deltaTime;
-            if(counter_flying < fly_time){
-                sphere->fly(deltaTime, 1);
-            }else{
+            sphere->fly(deltaTime);
+            if(sphere->m_center[1]-sphere->m_radius < 0.00001){
+                sphere->velocity = -sphere->velocity;
+                sphere->velocity[0] = -sphere->velocity[0];
+            }
+            if(sphere->velocity[1] < 0.00001 and sphere->m_center[1]-sphere->m_radius < 0.00001){
                 sphere->isFlying = false;
+                sphere->velocity = glm::vec3(0.0,0.0,0.0);
                 std::cout << "fly is over" << std::endl;
             }
         }
@@ -430,7 +433,7 @@ void key (GLFWwindow *window, int key, int scancode, int action, int mods ) {
     }else if ( key == GLFW_KEY_SPACE and action == GLFW_PRESS ){
         sphere->isFlying = true;
         std::cout << "fly starts" << std::endl;
-        sphere->velocity = glm::vec3(1.0,1.0,0.0) * glm::vec3(0.2,0.2,0.2);
+        sphere->velocity = glm::vec3(1.0,1.0,0.0) * glm::vec3(initial_speed,initial_speed,initial_speed);
     }
 
     if( key == GLFW_KEY_G or key == GLFW_KEY_F or key == GLFW_KEY_V or key == GLFW_KEY_T){
