@@ -13,7 +13,7 @@ public:
 
     // general method to update scene graph
     void updateGraph(SceneGraph root, GLuint programID, Camera *camera,
-                     GLTexture *grass_texture, GLTexture *rock_texture, GLTexture *snowrocks_texture, GLTexture *sun_texture){
+                     GLTexture *grass_texture, GLTexture *rock_texture, GLTexture *snowrocks_texture,  GLTexture *snow_texture, GLTexture *sun_texture){
         SceneObject *obj = root.getData();
 
         // transform Model matrix
@@ -36,8 +36,9 @@ public:
             grass_texture->sendTextureToShader(programID, "texture_grass", 0);
             rock_texture->sendTextureToShader(programID, "texture_rock", 1);
             snowrocks_texture->sendTextureToShader(programID, "texture_snowrocks", 2);
+            snow_texture->sendTextureToShader(programID, "texture_snow", 3);
         }else{
-            sun_texture->sendTextureToShader(programID, "texture_sun", 3);
+            sun_texture->sendTextureToShader(programID, "texture_sun", 4);
         }
 
         obj->loadBuffers();
@@ -45,7 +46,7 @@ public:
 
         for(SceneGraph *child : root.getChildren()){
             SceneObject *child_obj = child->getData();
-            updateGraph(*child, programID, camera, grass_texture, rock_texture, snowrocks_texture, sun_texture);
+            updateGraph(*child, programID, camera, grass_texture, rock_texture, snowrocks_texture, snow_texture, sun_texture);
         }
     }
 

@@ -67,12 +67,12 @@ Transform transformer; // to transform scene objects one by one
 float angle = 0.;
 float zoom = 1.;
 
-bool heightmap_activated = false;
+bool heightmap_activated = true;
 
 // plane data
-float plane_len =  9.0;
-int plane_dim = 40;
-Plane *plane = new Plane(plane_len, plane_len, plane_dim, plane_dim);
+float plane_len =  3.0;
+int plane_dim = 30;
+Plane *plane = new Plane(plane_len+5.0, plane_len, plane_dim, plane_dim);
 
 // sphere data
 Sphere *sphere = new Sphere();
@@ -85,6 +85,7 @@ Texture *height_map = new Texture();
 GLTexture *grass_texture = new GLTexture();
 GLTexture *rock_texture = new GLTexture();
 GLTexture *snowrocks_texture = new GLTexture();
+GLTexture *snow_texture = new GLTexture();
 GLTexture *sun_texture = new GLTexture();
 
 GLuint programID;
@@ -179,7 +180,7 @@ int main( void )
 
     // use height map
     if(heightmap_activated){
-        height_map->readPGMTexture((char*)"textures/Heightmap_Mountain512.pgm");
+        height_map->readPGMTexture((char*)"textures/heightmap_jeu1024.pgm");
         plane->addHeightMap(height_map->data, height_map->height, height_map->width);
     }
 
@@ -190,7 +191,7 @@ int main( void )
     // -----------------------------------------------------------------------------------
     // SPHERE OBJECT (TP4)
     // -----------------------------------------------------------------------------------
-    sphere->m_radius =  0.1f;//0.05f;
+    sphere->m_radius =  0.02f;//0.05f;
     sphere->m_center = glm::vec3(plane->center[0], 0.0, plane->center[2]);
     double height_sphere = 0.0;
     if(heightmap_activated){
@@ -200,7 +201,7 @@ int main( void )
     //sphere->m_center = center_sphere;
     sphere->build_arrays();
     sphere->build_arrays_for_resolutions();
-    sphere->setColor(glm::vec4(1.0,0.0,0.0,0.0));
+    sphere->setColor(glm::vec4(0.0,0.0,0.0,0.0));
     sphere->generateBuffers();
 
     sphere->transformations.push_back(glm::vec3(0.0,0.0,0.0));
@@ -237,6 +238,10 @@ int main( void )
     snowrocks_texture->generateTexture();
     snowrocks_texture->loadTexture((char*)"textures/snowrocks.png");
     snowrocks_texture->defineParameters();
+
+    snow_texture->generateTexture();
+    snow_texture->loadTexture((char*)"textures/snowTest.png");
+    snow_texture->defineParameters();
     // ------------------------------------------------------------------------------------
 
     // Get a handle for our "LightPosition" uniform
@@ -303,7 +308,7 @@ int main( void )
         }*/
 
         // solar system
-        transformer.updateGraph(*root, programID, camera, grass_texture, rock_texture, snowrocks_texture, sun_texture);
+        transformer.updateGraph(*root, programID, camera, grass_texture, rock_texture, snowrocks_texture, snow_texture, sun_texture);
 
         // Swap buffers
         glfwSwapBuffers(window);

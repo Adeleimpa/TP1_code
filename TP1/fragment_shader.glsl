@@ -8,6 +8,7 @@
 uniform sampler2D texture_grass;
 uniform sampler2D texture_rock;
 uniform sampler2D texture_snowrocks;
+uniform sampler2D texture_snow;
 uniform sampler2D texture_sun;
 in vec2 coord_txt;
 
@@ -27,12 +28,12 @@ void main(){
         //color = vec3(0.0, 0.0, 1.0);
 
         if(isTerrain == 0){ // is not a terrain
-                //gl_FragColor = mesh_color;
-                gl_FragColor = texture(texture_sun, coord_txt);
+                gl_FragColor = mesh_color;
+                //gl_FragColor = texture(texture_sun, coord_txt);
 
         }else if(isTerrain == 1){
 
-                if (height < 0.2){
+                /*if (height < 0.2){
                         gl_FragColor = texture(texture_grass, coord_txt);
                 } else if (height >= 0.2 && height < 0.7){
                         gl_FragColor = texture(texture_rock, coord_txt);
@@ -61,7 +62,9 @@ void main(){
                                 coef_snowrocks = 1.0 - coef_rock;
                         }
                         gl_FragColor = coef_rock*texture(texture_rock, coord_txt) + coef_snowrocks*texture(texture_snowrocks, coord_txt);
-                }
+                }*/
+
+                gl_FragColor = texture(texture_snow, coord_txt);
 
                 //gl_FragColor = mesh_color;
         }
