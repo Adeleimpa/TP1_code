@@ -47,8 +47,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP1/TP1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/TP1.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/Transform.h" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/Transform.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/fragment_shader.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/fragment_shader.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/textures/heightmap_jeu1024.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/textures/heightmap_jeu1024.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/textures/snowTest.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/TP1.dir/TP1/TP1.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/TP1" beforeDir="false" afterPath="$PROJECT_DIR$/build/TP1" afterDir="false" />
     </list>

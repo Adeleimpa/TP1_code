@@ -72,7 +72,7 @@ bool heightmap_activated = true;
 // plane data
 float plane_len =  3.0;
 int plane_dim = 30;
-Plane *plane = new Plane(plane_len+5.0, plane_len, plane_dim, plane_dim);
+Plane *plane = new Plane(plane_len, plane_len+6.0, plane_dim, plane_dim);
 
 // sphere data
 Sphere *sphere = new Sphere();
@@ -240,7 +240,7 @@ int main( void )
     snowrocks_texture->defineParameters();
 
     snow_texture->generateTexture();
-    snow_texture->loadTexture((char*)"textures/snowTest.png");
+    snow_texture->loadTexture((char*)"textures/snow.png");
     snow_texture->defineParameters();
     // ------------------------------------------------------------------------------------
 
